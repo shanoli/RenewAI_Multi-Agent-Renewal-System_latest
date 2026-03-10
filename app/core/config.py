@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     chroma_db_path: str = "./data/chroma_db"
     app_host: str = "0.0.0.0"
-    app_port: int = 8000
+    app_port: int = 8090
     debug: bool = True
     embedding_model: str = "models/text-embedding-004"
     chroma_telemetry_gather: bool = False
