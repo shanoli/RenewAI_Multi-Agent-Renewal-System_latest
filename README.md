@@ -57,7 +57,7 @@ uvicorn app.main:app --reload
 
 ### 5. Open Swagger UI
 ```
-http://localhost:8000/docs
+http://localhost:8090/docs
 ```
 
 ---
