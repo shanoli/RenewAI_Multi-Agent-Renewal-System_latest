@@ -69,7 +69,7 @@ JWT login with **email as primary key**.
 **Default credentials (after setup):**
 | Role    | Email                    | Password     |
 |---------|--------------------------|--------------|
-| admin   | admin@renewai.com        | admin123     |
+| admin   | admin@suraksha.com        | admin123     |
 | agent   | agent1@renewai.com       | agent123     |
 | manager | manager@renewai.com      | manager123   |
 
