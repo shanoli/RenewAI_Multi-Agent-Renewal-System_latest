@@ -3,6 +3,7 @@ RenewAI — Main FastAPI Application
 Multi-agent renewal system for Suraksha Life Insurance
 """
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.db.database import init_db
@@ -10,6 +11,8 @@ from app.rag.chroma_store import init_chroma
 from app.api.auth import router as auth_router
 from app.api.renewal import router as renewal_router
 from app.api.dashboard import router as dashboard_router
+from app.api.prompts import router as prompts_router
+from app.api.webhooks import router as webhooks_router
 from fastapi.staticfiles import StaticFiles
 from app.utils.logger import logger
 import os
@@ -23,7 +26,7 @@ async def lifespan(app: FastAPI):
     os.makedirs("static", exist_ok=True)
     await init_db()
     init_chroma()
-    logger.info("✅ RenewAI ready — http://localhost:8000/docs")
+    logger.info("✅ RenewAI ready - Swagger: localhost:port/docs")
     yield
     # Shutdown
     logger.info("🛑 RenewAI shutting down")
@@ -67,20 +70,17 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(renewal_router)
 app.include_router(dashboard_router)
+app.include_router(prompts_router)
+app.include_router(webhooks_router, prefix="/api/webhooks", tags=["Webhooks"])
 
 # Mount Static Files
 os.makedirs("static", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-@app.get("/", tags=["Health"])
+@app.get("/", tags=["UI"], include_in_schema=False)
 async def root():
-    return {
-        "service": "RenewAI",
-        "version": "1.0.0",
-        "status": "running",
-        "docs": "/docs"
-    }
+    return FileResponse("app/web/index.html")
 
 
 @app.get("/health", tags=["Health"])

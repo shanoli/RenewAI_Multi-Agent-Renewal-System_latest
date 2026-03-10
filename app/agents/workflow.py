@@ -1,7 +1,11 @@
 """
 LangGraph Workflow Definition
 Connects all agents in the correct sequence.
+Includes timing + token telemetry for each node.
 """
+import time
+import asyncio
+import aiosqlite
 from langgraph.graph import StateGraph, END
 from app.agents.state import RenewalState
 from app.agents.orchestrator import orchestrator_node
@@ -14,6 +18,43 @@ from app.agents.escalation import escalation_node
 from app.agents.channels.email_agent import email_send_node
 from app.agents.channels.whatsapp_agent import whatsapp_send_node
 from app.agents.channels.voice_agent import voice_send_node
+from app.core.config import get_settings
+
+settings = get_settings()
+
+
+def timed_node(agent_name: str, fn):
+    """Wraps an agent node to record execution time and token usage."""
+    async def wrapper(state: RenewalState) -> dict:
+        t_start = time.monotonic()
+        status = "SUCCESS"
+        tokens_in = 0
+        tokens_out = 0
+        try:
+            result = await fn(state)
+            # Extract token usage if agents returned it
+            tokens_in = result.pop("_tokens_in", 0) or 0
+            tokens_out = result.pop("_tokens_out", 0) or 0
+            return result
+        except Exception as e:
+            status = f"ERROR: {str(e)[:100]}"
+            raise
+        finally:
+            duration_ms = (time.monotonic() - t_start) * 1000
+            policy_id = state.get("policy_id", "UNKNOWN")
+            try:
+                async with aiosqlite.connect(settings.sqlite_db_path) as db:
+                    await db.execute(
+                        """INSERT INTO agent_telemetry 
+                           (policy_id, agent_name, execution_time_ms, tokens_input, tokens_output, status) 
+                           VALUES (?, ?, ?, ?, ?, ?)""",
+                        (policy_id, agent_name, round(duration_ms, 2), tokens_in, tokens_out, status)
+                    )
+                    await db.commit()
+            except Exception:
+                pass  # Never let telemetry crash the workflow
+
+    return wrapper
 
 
 def route_after_orchestrator(state: RenewalState) -> str:
@@ -44,17 +85,16 @@ def route_channel(state: RenewalState) -> str:
 
 async def parallel_draft_and_greeting(state: RenewalState) -> dict:
     """Run Greeting/Closing and Draft Agent in parallel."""
-    import asyncio
     greeting_task = asyncio.create_task(greeting_closing_node(state))
     draft_task = asyncio.create_task(draft_agent_node(state))
-    
+
     greeting_result, draft_result = await asyncio.gather(greeting_task, draft_task)
-    
+
     # Merge results
     merged = {}
     merged.update(greeting_result)
     merged.update(draft_result)
-    
+
     # Merge audit trails
     merged["audit_trail"] = (
         greeting_result.get("audit_trail", []) +
@@ -67,16 +107,16 @@ async def parallel_draft_and_greeting(state: RenewalState) -> dict:
 def build_workflow() -> StateGraph:
     graph = StateGraph(RenewalState)
 
-    # Add nodes
-    graph.add_node("orchestrator", orchestrator_node)
-    graph.add_node("critique_a", critique_a_node)
-    graph.add_node("planner", planner_node)
-    graph.add_node("draft_and_greeting", parallel_draft_and_greeting)
-    graph.add_node("critique_b", critique_b_node)
-    graph.add_node("escalation", escalation_node)
-    graph.add_node("email_send", email_send_node)
-    graph.add_node("whatsapp_send", whatsapp_send_node)
-    graph.add_node("voice_send", voice_send_node)
+    # Add nodes — all wrapped with timing telemetry
+    graph.add_node("orchestrator",      timed_node("ORCHESTRATOR",      orchestrator_node))
+    graph.add_node("critique_a",        timed_node("CRITIQUE_A",        critique_a_node))
+    graph.add_node("planner",           timed_node("PLANNER",           planner_node))
+    graph.add_node("draft_and_greeting",timed_node("DRAFT_AND_GREETING",parallel_draft_and_greeting))
+    graph.add_node("critique_b",        timed_node("CRITIQUE_B",        critique_b_node))
+    graph.add_node("escalation",        timed_node("ESCALATION",        escalation_node))
+    graph.add_node("email_send",        timed_node("EMAIL_AGENT",       email_send_node))
+    graph.add_node("whatsapp_send",     timed_node("WHATSAPP_AGENT",    whatsapp_send_node))
+    graph.add_node("voice_send",        timed_node("VOICE_AGENT",       voice_send_node))
     graph.add_node("channel_router", lambda s: s)  # pass-through router
 
     # Entry point

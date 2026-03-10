@@ -13,6 +13,8 @@ class RenewalState(TypedDict):
     customer_name: str
     customer_age: int
     customer_city: str
+    customer_phone: Optional[str]
+    customer_email: Optional[str]
     preferred_channel: str
     preferred_language: str
     segment: str
@@ -54,4 +56,5 @@ class RenewalState(TypedDict):
     # Output / audit
     messages_sent: Annotated[List[str], operator.add]
     audit_trail: Annotated[List[str], operator.add]
+    active_versions: Dict[str, int] # agent_name -> version
     error: Optional[str]

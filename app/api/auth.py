@@ -56,18 +56,12 @@ async def register(req: RegisterRequest):
 
 
 
-@router.post("/login", response_model=TokenResponse, summary="Login (Password-less for now)")
+@router.post("/login", response_model=TokenResponse, summary="Login (POC: Any email accepted)")
 async def login(req: LoginRequest):
-    async with aiosqlite.connect(settings.sqlite_db_path) as db:
-        db.row_factory = aiosqlite.Row
-        cursor = await db.execute(
-            "SELECT email, name, role FROM users WHERE email=?", (req.email,)
-        )
-        user = await cursor.fetchone()
+    # POC: Accept any email without checking database
+    # Extract name from email (before @)
+    name = req.email.split('@')[0].replace('.', ' ').title()
     
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid email")
-    
-    token = create_access_token({"sub": user["email"], "role": user["role"]})
-    return TokenResponse(access_token=token, name=user["name"], role=user["role"])
+    token = create_access_token({"sub": req.email, "role": "agent"})
+    return TokenResponse(access_token=token, name=name, role="agent")
 

@@ -5,7 +5,12 @@ Reviews the final assembled message for compliance, tone, accuracy.
 from app.agents.state import RenewalState
 from app.core.gemini_client import call_llm_json
 from app.rag.chroma_store import hybrid_search_and_rerank
+from app.api.prompts import get_active_prompt
+from app.core.config import get_settings
 import json
+import aiosqlite
+
+settings = get_settings()
 
 CRITIQUE_B_SYSTEM_PROMPT = """
 You are the RenewAI Critique Agent, Phase B — the content compliance reviewer.
@@ -37,6 +42,11 @@ Respond ONLY with valid JSON:
 
 async def critique_b_node(state: RenewalState) -> dict:
     """Step 5: Review assembled message for compliance and quality."""
+    
+    # Fetch prompt from DB
+    prompt_data = await get_active_prompt("CRITIQUE_B")
+    system_prompt = prompt_data["prompt_text"] or CRITIQUE_B_SYSTEM_PROMPT
+    version = prompt_data["version"]
     
     # RAG: regulatory guidelines for compliance check
     reg_results = hybrid_search_and_rerank(
@@ -72,11 +82,23 @@ Regulatory Guidelines:
 {reg_context}
 """
 
-    result = await call_llm_json(CRITIQUE_B_SYSTEM_PROMPT, user_prompt)
+    result = await call_llm_json(system_prompt, user_prompt)
     verdict = result.get("verdict", "APPROVED")
+
+    active_versions = state.get("active_versions", {})
+    if version:
+        active_versions["CRITIQUE_B"] = version
+
+    async with aiosqlite.connect(settings.sqlite_db_path) as db:
+        await db.execute(
+            "INSERT INTO audit_logs (policy_id, action_type, action_reason, triggered_by, prompt_version) VALUES (?, ?, ?, ?, ?)",
+            (state["policy_id"], f"CRITIQUE_B_{verdict}", f"Verdict: {verdict} | Score: {result.get('compliance_score')} | Issues: {result.get('issues')}", "Critique B Agent", version)
+        )
+        await db.commit()
 
     updates = {
         "critique_b_result": verdict,
+        "active_versions": active_versions,
         "audit_trail": [f"[CRITIQUE_B] Verdict: {verdict} | Score: {result.get('compliance_score')} | Issues: {result.get('issues')}"]
     }
 

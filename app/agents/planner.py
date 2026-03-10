@@ -6,7 +6,12 @@ RAG retrieves policy documents + objection playbooks.
 from app.agents.state import RenewalState
 from app.core.gemini_client import call_llm_json
 from app.rag.chroma_store import hybrid_search_and_rerank
+from app.api.prompts import get_active_prompt
+from app.core.config import get_settings
 import json
+import aiosqlite
+
+settings = get_settings()
 
 PLANNER_SYSTEM_PROMPT = """
 You are the RenewAI Planner Agent.
@@ -33,6 +38,11 @@ Output ONLY valid JSON:
 async def planner_node(state: RenewalState) -> dict:
     """Step 3: Build channel-specific execution plan."""
     
+    # Fetch prompt from DB
+    prompt_data = await get_active_prompt("PLANNER")
+    system_prompt = prompt_data["prompt_text"] or PLANNER_SYSTEM_PROMPT
+    version = prompt_data["version"]
+
     channel = state.get("selected_channel", "Email")
     
     # RAG: policy documents
@@ -75,12 +85,24 @@ Retrieved Objection Playbooks:
 Recent Interactions: {json.dumps(state.get('interaction_history', [])[-3:], indent=2)}
 """
 
-    plan = await call_llm_json(PLANNER_SYSTEM_PROMPT, user_prompt)
+    plan = await call_llm_json(system_prompt, user_prompt)
+
+    active_versions = state.get("active_versions", {})
+    if version:
+        active_versions["PLANNER"] = version
+
+    async with aiosqlite.connect(settings.sqlite_db_path) as db:
+        await db.execute(
+            "INSERT INTO audit_logs (policy_id, action_type, action_reason, triggered_by, prompt_version) VALUES (?, ?, ?, ?, ?)",
+            (state["policy_id"], "PLAN_BUILT", f"Plan built for {channel} | Tone: {plan.get('tone')} | Language: {plan.get('language')}", "Planner Agent", version)
+        )
+        await db.commit()
 
     return {
         "current_node": "DRAFT_AND_GREETING",
         "execution_plan": plan,
         "rag_policy_docs": policy_context,
         "rag_objections": obj_context,
+        "active_versions": active_versions,
         "audit_trail": [f"[PLANNER] Plan built for {channel} | Tone: {plan.get('tone')} | Language: {plan.get('language')}"]
     }

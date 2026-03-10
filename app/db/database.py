@@ -88,6 +88,7 @@ async def init_db():
             action_type TEXT,
             action_reason TEXT,
             triggered_by TEXT,
+            prompt_version INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
@@ -99,10 +100,37 @@ async def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
+        CREATE TABLE IF NOT EXISTS agent_telemetry (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            policy_id TEXT,
+            agent_name TEXT,
+            execution_time_ms REAL,
+            tokens_input INTEGER DEFAULT 0,
+            tokens_output INTEGER DEFAULT 0,
+            status TEXT DEFAULT 'SUCCESS',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS ab_tests (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            segment TEXT,
+            channel TEXT,
+            variant_a TEXT,
+            variant_b TEXT,
+            sends_a INTEGER DEFAULT 0,
+            sends_b INTEGER DEFAULT 0,
+            conv_a INTEGER DEFAULT 0,
+            conv_b INTEGER DEFAULT 0,
+            status TEXT DEFAULT 'RUNNING',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
         CREATE INDEX IF NOT EXISTS idx_interactions_policy ON interactions(policy_id);
         CREATE INDEX IF NOT EXISTS idx_policy_state_node ON policy_state(current_node);
         CREATE INDEX IF NOT EXISTS idx_escalation_status ON escalation_cases(status);
         CREATE INDEX IF NOT EXISTS idx_audit_policy ON audit_logs(policy_id);
+        CREATE INDEX IF NOT EXISTS idx_ab_tests_status ON ab_tests(status);
         """)
         await db.commit()
     print(f"[DB] SQLite initialized at {settings.sqlite_db_path}")

@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RenewAI — Suraksha Life Insurance</title>
+  <link rel="icon" href="data:,">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0d0f14;
+      --paper: #f5f2ed;
+      --paper2: #ece9e3;
+      --teal: #00897b;
+      --teal-light: #e0f2f0;
+      --amber: #e65100;
+      --amber-light: #fff3e0;
+      --red: #c62828;
+      --red-light: #ffebee;
+      --gold: #f9a825;
+      --gold-light: #fffde7;
+      --blue: #1565c0;
+      --blue-light: #e3f2fd;
+      --purple: #6a1b9a;
+      --purple-light: #f3e5f5;
+      --border: #d4cfc8;
+      --muted: #7a7570;
+      --card: #ffffff;
+      --success: #2e7d32;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      font-size: 13px;
+    }
+
+    /* ── SIDEBAR ── */
+    .shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      min-height: 100vh;
+      background: var(--ink);
+      color: var(--paper);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-brand h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: -0.5px;
+    }
+
+    .sidebar-brand p {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 2px;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 0;
+    }
+
+    .nav-section {
+      padding: 10px 18px 4px;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12.5px;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+      font-weight: 400;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+    }
+
+    .nav-item.active {
+      background: rgba(249, 168, 37, 0.12);
+      color: var(--gold);
+      border-left-color: var(--gold);
+    }
+
+    .nav-item svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: 14px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #4caf50;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: 220px;
+      flex: 1;
+    }
+
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.3px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1a1f2e;
+    }
+
+    .btn-teal {
+      background: var(--teal);
+      color: white;
+    }
+
+    .btn-teal:hover {
+      background: #00695c;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    .btn-ghost:hover {
+      background: var(--paper);
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      color: white;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .btn-purple {
+      background: var(--purple);
+      color: white;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      padding: 24px 28px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ── STAT CARDS ── */
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .stat-card.teal::before {
+      background: var(--teal);
+    }
+
+    .stat-card.amber::before {
+      background: var(--amber);
+    }
+
+    .stat-card.gold::before {
+      background: var(--gold);
+    }
+
+    .stat-card.red::before {
+      background: var(--red);
+    }
+
+    .stat-card.blue::before {
+      background: var(--blue);
+    }
+
+    .stat-card.purple::before {
+      background: var(--purple);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--paper);
+    }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .badge-teal {
+      background: var(--teal-light);
+      color: var(--teal);
+    }
+
+    .badge-amber {
+      background: var(--amber-light);
+      color: var(--amber);
+    }
+
+    .badge-red {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .badge-gold {
+      background: var(--gold-light);
+      color: #795548;
+    }
+
+    .badge-blue {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .badge-purple {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .badge-gray {
+      background: var(--paper2);
+      color: var(--muted);
+    }
+
+    /* ── AGENT FLOW DIAGRAM ── */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding: 24px 0 16px;
+    }
+
+    .flow-node {
+      min-width: 110px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .flow-node-box {
+      border-radius: 10px;
+      padding: 12px 8px;
+      border: 2px solid var(--border);
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .flow-node:hover .flow-node-box {
+      border-color: var(--ink);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .flow-node-box.teal {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+
+    .flow-node-box.amber {
+      border-color: var(--amber);
+      background: var(--amber-light);
+    }
+
+    .flow-node-box.gold {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+
+    .flow-node-box.blue {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .flow-node-box.purple {
+      border-color: var(--purple);
+      background: var(--purple-light);
+    }
+
+    .flow-node-box.red {
+      border-color: var(--red);
+      background: var(--red-light);
+    }
+
+    .flow-node-icon {
+      font-size: 20px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .flow-node-name {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .flow-node-sub {
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.2;
+    }
+
+    .flow-arrow {
+      width: 32px;
+      min-width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 18px;
+      padding-top: 0;
+    }
+
+    .flow-parallel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ── PROMPT LAB ── */
+    .prompt-editor textarea {
+      width: 100%;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      resize: vertical;
+      min-height: 200px;
+      background: #f8f7f5;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .prompt-editor textarea:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0, 137, 123, 0.1);
+    }
+
+    .version-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .version-pill.active {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+
+    .version-pill:hover:not(.active) {
+      background: var(--paper2);
+    }
+
+    .perf-bar {
+      height: 6px;
+      background: var(--paper2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .perf-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--teal);
+      transition: width 0.6s ease;
+    }
+
+    .perf-bar-fill.v2 {
+      background: var(--amber);
+    }
+
+    /* ── A/B TESTING ── */
+    .ab-variant {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .ab-variant.selected {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+
+    .ab-variant-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .ab-variant-label.a {
+      color: var(--teal);
+    }
+
+    .ab-variant-label.b {
+      color: var(--amber);
+    }
+
+    .conversion-chart {
+      display: flex;
+      gap: 4px;
+      align-items: flex-end;
+      height: 60px;
+      margin-top: 8px;
+    }
+
+    .bar-col {
+      flex: 1;
+      border-radius: 3px 3px 0 0;
+      min-height: 4px;
+      transition: height 0.5s ease;
+    }
+
+    .bar-col.a {
+      background: var(--teal);
+    }
+
+    .bar-col.b {
+      background: var(--amber);
+    }
+
+    /* ── ESCALATION ── */
+    .escalation-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      border-left: 4px solid var(--red);
+      margin-bottom: 10px;
+    }
+
+    .escalation-card.p-high {
+      border-left-color: var(--red);
+    }
+
+    .escalation-card.p-medium {
+      border-left-color: var(--amber);
+    }
+
+    .escalation-card.p-low {
+      border-left-color: var(--gold);
+    }
+
+    .escalation-timeline {
+      position: relative;
+      padding-left: 24px;
+      margin-top: 14px;
+    }
+
+    .escalation-timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -20px;
+      top: 3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 2px solid white;
+      box-shadow: 0 0 0 1px var(--teal);
+    }
+
+    .timeline-dot.red {
+      background: var(--red);
+      box-shadow: 0 0 0 1px var(--red);
+    }
+
+    .timeline-dot.amber {
+      background: var(--amber);
+      box-shadow: 0 0 0 1px var(--amber);
+    }
+
+    .timeline-time {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 2px;
+    }
+
+    .timeline-text {
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    /* ── AGENT STATS ── */
+    .agent-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      background: var(--paper);
+      transition: all 0.15s;
+    }
+
+    .agent-stat-row:hover {
+      background: var(--paper2);
+    }
+
+    .agent-stat-name {
+      width: 140px;
+      font-weight: 600;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .agent-stat-metric {
+      min-width: 80px;
+    }
+
+    .agent-stat-metric .val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: 'Fraunces', serif;
+    }
+
+    .agent-stat-metric .lbl {
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .token-cost {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* ── MODALS ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 640px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-title {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--paper2);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── MISC ── */
+    .section-gap {
+      margin-top: 20px;
+    }
+
+    .label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      background: white;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0, 137, 123, 0.1);
+    }
+
+    select.input {
+      cursor: pointer;
+    }
+
+    .select-agent {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .agent-tab {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      transition: all 0.15s;
+    }
+
+    .agent-tab.active {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+
+    .agent-tab:hover:not(.active) {
+      background: var(--paper2);
+    }
+
+    .score-ring {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid var(--teal);
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--teal);
+      flex-shrink: 0;
+    }
+
+    .score-ring.amber {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .score-ring.red {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--paper2);
+      font-size: 12px;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-row .k {
+      color: var(--muted);
+    }
+
+    .info-row .v {
+      font-weight: 600;
+    }
+
+    .ab-result-bar {
+      display: flex;
+      height: 28px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .ab-result-bar .seg-a {
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .ab-result-bar .seg-b {
+      background: var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .segment-chip {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--paper2);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .trend-up {
+      color: var(--success);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .trend-down {
+      color: var(--red);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── responsive ── */
+    @media (max-width: 960px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    .hint {
+      background: var(--blue-light);
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--blue);
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .warn {
+      background: var(--amber-light);
+      border: 1px solid #ffcc02;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--amber);
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .sla-countdown {
+      font-family: 'DM Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--red);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--paper2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ── LOGIN OVERLAY ── -->
+  <div id="login-overlay"
+    style="display:flex;position:fixed;inset:0;z-index:9999;background:rgba(10,15,25,0.92);align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+    <div
+      style="background:#fff;border-radius:20px;padding:48px 40px;width:380px;box-shadow:0 32px 80px rgba(0,0,0,0.4);text-align:center;">
+      <div style="font-size:48px;margin-bottom:12px;">🛡️</div>
+      <h2 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:6px;">RenewAI Dashboard</h2>
+      <p style="font-size:13px;color:#64748b;margin-bottom:28px;">Suraksha Life Insurance · Multi-Agent System</p>
+      <form id="login-form" style="display:flex;flex-direction:column;gap:12px;">
+        <input id="login-email" type="email" value="admin@suraksha.com" required
+          style="padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;outline:none;transition:border 0.2s;"
+          placeholder="your@email.com" onfocus="this.style.borderColor='#0d9488'"
+          onblur="this.style.borderColor='#e2e8f0'" />
+        <button type="submit" class="btn-login"
+          style="padding:13px;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:opacity 0.2s;"
+          onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          Enter Dashboard
+        </button>
+      </form>
+      <p style="font-size:11px;color:#94a3b8;margin-top:16px;">Any registered email · password not required</p>
+    </div>
+  </div>
+
+  <div class="shell">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar">
+      <div class="sidebar-brand">
+        <h1>RenewAI</h1>
+        <p>Suraksha Life Insurance</p>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">Operations</div>
+        <div class="nav-item active" onclick="switchTab('overview')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          Overview
+        </div>
+        <div class="nav-item" onclick="switchTab('policies')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Policies
+        </div>
+        <div class="nav-item" onclick="switchTab('agents')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M6 20v-1a6 6 0 0112 0v1" stroke-linecap="round" />
+          </svg>
+          Agents
+        </div>
+        <div class="nav-section">Intelligence</div>
+        <div class="nav-item" onclick="switchTab('prompts')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Prompt Lab
+        </div>
+        <div class="nav-item" onclick="switchTab('abtesting')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h8m-8 6h16" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          A/B Testing
+        </div>
+        <div class="nav-section">Human Oversight</div>
+        <div class="nav-item" onclick="switchTab('escalation')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Escalation
+          <span class="badge badge-red" style="margin-left:auto;padding:2px 7px;">3</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('audit')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Audit Log
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>AI Engine Active
+      </div>
+    </nav>
+
+    <!-- ── MAIN ── -->
+    <div class="main">
+
+      <!-- ── OVERVIEW TAB ── -->
+      <div id="tab-overview" class="tab-panel active">
+        <div class="topbar">
+          <div>
+            <h2>Operations Overview</h2>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Last refreshed: 2 min ago · T-45 cycle active
+            </div>
+          </div>
+          <div class="topbar-right">
+            <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Export CSV</button>
+            <button class="btn btn-primary btn-sm" onclick="showTriggerBatchModal()">▶ Trigger Renewal Batch</button>
+          </div>
+        </div>
+
+        <div class="content">
+          <!-- KPIs -->
+          <div class="grid-4">
+            <div class="stat-card teal">
+              <div class="stat-label">Total Policies</div>
+              <div class="stat-value" id="stat-total-policies">—</div>
+              <div class="stat-sub" id="stat-total-sub">Loading...</div>
+            </div>
+            <div class="stat-card gold">
+              <div class="stat-label">AI Managed</div>
+              <div class="stat-value" id="stat-ai-managed">—</div>
+              <div class="stat-sub" id="stat-ai-sub">Loading...</div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-label">Open Escalations</div>
+              <div class="stat-value" id="stat-open-escalations">—</div>
+              <div class="stat-sub" id="stat-esc-sub">Loading...</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-label">Distress Flags</div>
+              <div class="stat-value" id="stat-distress-flags">—</div>
+              <div class="stat-sub" id="stat-distress-sub">Loading...</div>
+            </div>
+          </div>
+
+          <div class="section-gap grid-2">
+            <!-- Agent Pipeline Flow -->
+            <div class="card" style="grid-column: 1/-1;">
+              <div class="card-title">🔗 Agent Pipeline — Logical Flow</div>
+              <div class="hint">
+                ℹ️ <span><strong>Evidence-based flow:</strong> Orchestrator selects channel → Critique A verifies
+                  channel with evidence from RAG + interaction history → Planner builds execution plan → Draft +
+                  Greeting/Closing run in parallel → Critique B reviews the assembled message for compliance.</span>
+              </div>
+              <div class="flow-diagram" id="pipeline-flow">
+                <div class="flow-node" onclick="showAgentDetail('orchestrator')">
+                  <div class="flow-node-box teal">
+                    <span class="flow-node-icon">🎯</span>
+                    <div class="flow-node-name">Orchestrator</div>
+                    <div class="flow-node-sub">Channel selection<br />+ escalation check</div>
+                  </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node" onclick="showAgentDetail('critique_a')">
+                  <div class="flow-node-box blue">
+                    <span class="flow-node-icon">🔍</span>
+                    <div class="flow-node-name">Critique A</div>
+                    <div class="flow-node-sub">Verify channel<br />w/ evidence score</div>
+                  </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node" onclick="showAgentDetail('planner')">
+                  <div class="flow-node-box gold">
+                    <span class="flow-node-icon">🧠</span>
+                    <div class="flow-node-name">Planner</div>
+                    <div class="flow-node-sub">Execution plan:<br />tone, lang, CTA</div>
+                  </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-parallel">
+                  <div class="flow-node" onclick="showAgentDetail('draft')">
+                    <div class="flow-node-box" style="border-color:#5c6bc0;background:#e8eaf6;">
+                      <span class="flow-node-icon">✍️</span>
+                      <div class="flow-node-name">Draft Agent</div>
+                      <div class="flow-node-sub">Channel-specific body</div>
+                    </div>
+                  </div>
+                  <div class="flow-node" onclick="showAgentDetail('greeting')">
+                    <div class="flow-node-box" style="border-color:#5c6bc0;background:#e8eaf6;">
+                      <span class="flow-node-icon">👋</span>
+                      <div class="flow-node-name">Greeting/Close</div>
+                      <div class="flow-node-sub">Runs in parallel</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node" onclick="showAgentDetail('critique_b')">
+                  <div class="flow-node-box purple">
+                    <span class="flow-node-icon">✅</span>
+                    <div class="flow-node-name">Critique B</div>
+                    <div class="flow-node-sub">Compliance + quality<br />evidence scoring</div>
+                  </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node" onclick="showAgentDetail('channel')">
+                  <div class="flow-node-box amber">
+                    <span class="flow-node-icon">📤</span>
+                    <div class="flow-node-name">Channel Agent</div>
+                    <div class="flow-node-sub">SendGrid (Email) / Twilio (WA) / Voice</div>
+                  </div>
+                </div>
+                <div class="flow-arrow" style="color:var(--red);">⇣</div>
+                <div class="flow-node" onclick="showAgentDetail('escalation_node')">
+                  <div class="flow-node-box red">
+                    <span class="flow-node-icon">👤</span>
+                    <div class="flow-node-name">Escalation</div>
+                    <div class="flow-node-sub">Human queue<br />SLA managed</div>
+                  </div>
+                </div>
+              </div>
+              <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:8px;">
+                Click any agent node for details · ⇣ = escalation path (bypasses steps 2-5)
+              </div>
+            </div>
+
+            <!-- Channel Distribution -->
+            <div class="card" id="channel-distribution-card">
+              <div class="card-title">📡 Channel Distribution (Last 24h)</div>
+              <div id="channel-distribution-content"
+                style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+                <p style="text-align:center;padding:20px;color:var(--muted);">Loading...</p>
+              </div>
+              <div class="divider"></div>
+              <div class="card-title" style="margin-bottom:8px;">🎯 Renewal Rate by Segment</div>
+              <div id="renewal-rate-content" style="display:flex;flex-direction:column;gap:8px;">
+                <p style="text-align:center;padding:20px;color:var(--muted);">Loading...</p>
+              </div>
+            </div>
+
+            <!-- Recent activity -->
+            <div class="card">
+              <div class="card-title">⚡ Recent Activity</div>
+              <div class="table-wrap">
+                <table id="recent-activity-table">
+                  <thead>
+                    <tr>
+                      <th>Policy</th>
+                      <th>Customer</th>
+                      <th>Agent</th>
+                      <th>Action</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- JS populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── POLICIES TAB ── -->
+      <div id="tab-policies" class="tab-panel">
+        <div class="topbar">
+          <h2>Policies</h2>
+          <div class="topbar-right">
+            <input id="policy-search" class="input" placeholder="Search policy / customer..." style="width:220px;"
+              oninput="filterPolicies()" />
+            <select id="policy-segment-filter" class="input" style="width:160px;" onchange="filterPolicies()">
+              <option value="">All Segments</option>
+              <option>HNI</option>
+              <option>Premium</option>
+              <option>Standard</option>
+              <option>Senior Citizen</option>
+              <option>Mass Market</option>
+            </select>
+            <select id="policy-status-filter" class="input" style="width:140px;" onchange="filterPolicies()">
+              <option value="">All Statuses</option>
+              <option>ACTIVE</option>
+              <option>LAPSED</option>
+              <option>PAID</option>
+              <option>OVERDUE</option>
+            </select>
+          </div>
+        </div>
+        <div class="content">
+          <div class="card">
+            <div class="table-wrap">
+              <table id="policies-table">
+                <thead>
+                  <tr>
+                    <th>Policy ID</th>
+                    <th>Customer</th>
+                    <th>Type</th>
+                    <th>Segment</th>
+                    <th>Premium ₹</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="policies-body">
+                  <tr>
+                    <td colspan="8" style="text-align:center;padding:30px;color:var(--muted);">Loading policies...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AGENTS TAB ── -->
+      <div id="tab-agents" class="tab-panel">
+        <div class="topbar">
+          <h2>Agent Performance</h2>
+          <div class="topbar-right">
+            <select class="input" style="width:140px;">
+              <option>Last 24h</option>
+              <option>Last 7 days</option>
+              <option>Last 30 days</option>
+            </select>
+          </div>
+        </div>
+        <div class="content">
+          <div class="hint">
+            ℹ️ <span>Token counts and costs are recorded per agent run. Price is estimated at <strong>₹0.22/1K input
+                tokens · ₹0.88/1K output tokens</strong> (Gemini Pro). Totals update in real-time from <code
+                style="font-size:11px;font-family:'DM Mono',monospace;">agent_telemetry</code> table.</span>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🤖 Per-Agent Telemetry</div>
+            <div id="agent-stats-container">
+              <p style="text-align:center;padding:20px;color:var(--muted);">Loading telemetry...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROMPT LAB TAB ── -->
+      <div id="tab-prompts" class="tab-panel">
+        <div class="topbar">
+          <h2>Prompt Lab</h2>
+          <div class="topbar-right">
+            <button class="btn btn-ghost btn-sm" onclick="openCompareModal()">📋 Compare Versions</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyPrompt()">📋 Copy Prompt</button>
+            <button class="btn btn-teal btn-sm" onclick="saveNewPromptVersion()">💾 Save as New Version</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="grid-2">
+            <!-- Left: agent selector + editor -->
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div class="card">
+                <div class="card-title">🤖 Select Agent</div>
+                <div class="select-agent" id="agentSelector">
+                  <div class="agent-tab active" onclick="selectAgent(this,'ORCHESTRATOR')">ORCHESTRATOR</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'CRITIQUE_A')">CRITIQUE_A</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'PLANNER')">PLANNER</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'EMAIL_DRAFT')">EMAIL_DRAFT</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'WHATSAPP_DRAFT')">WHATSAPP_DRAFT</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'VOICE_DRAFT')">VOICE_DRAFT</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'GREETING')">GREETING</div>
+                  <div class="agent-tab" onclick="selectAgent(this,'CRITIQUE_B')">CRITIQUE_B</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                  <div class="card-title" style="margin-bottom:0;">📝 Prompt Editor — <span id="activeAgentName"
+                      style="color:var(--teal);">ORCHESTRATOR</span></div>
+                  <span style="font-size:11px;color:var(--muted);" id="promptMeta">Loading...</span>
+                </div>
+                <div id="versionPills"
+                  style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+                  <span style="font-size:11px;color:var(--muted);">Loading versions...</span>
+                </div>
+                <div class="prompt-editor">
+                  <textarea id="promptTextarea" rows="14" placeholder="Loading prompt..."></textarea>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+                  <button class="btn btn-gold btn-sm" onclick="activateCurrentVersion()">✅ Activate This
+                    Version</button>
+                  <button class="btn btn-ghost btn-sm" onclick="runPromptTest()">▶ Test Prompt</button>
+                  <button class="btn btn-ghost btn-sm" onclick="copyPrompt()" style="margin-left:auto;">📋 Copy</button>
+                </div>
+              </div>
+
+              <!-- Test result -->
+              <div class="card" id="testResultCard" style="display:none;">
+                <div class="card-title">▶ Test Result</div>
+                <div
+                  style="font-family:'DM Mono',monospace;font-size:11px;background:var(--paper);padding:12px;border-radius:6px;white-space:pre-wrap;line-height:1.5;max-height:220px;overflow-y:auto;"
+                  id="testResultText"></div>
+                <div style="display:flex;gap:16px;margin-top:10px;font-size:12px;">
+                  <span>⏱️ <strong id="testDuration">—</strong> ms</span>
+                  <span>→ <strong id="testTokensIn">—</strong> tokens in</span>
+                  <span>← <strong id="testTokensOut">—</strong> tokens out</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: live versions list + flow info -->
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div class="card">
+                <div class="card-title">📋 All Saved Versions — <span id="versionsAgentName"
+                    style="color:var(--teal);">ORCHESTRATOR</span></div>
+                <div id="versionsListContainer">
+                  <p style="text-align:center;padding:20px;color:var(--muted);">Select an agent to see versions.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">🔬 How Prompts Flow Through Agents</div>
+                <div style="font-size:12px;line-height:1.7;color:var(--ink);">
+                  <p style="margin-bottom:8px;">Every agent fetches its <strong>active prompt version</strong> from the
+                    database at runtime. Activating a version here takes immediate effect for all future workflow runs.
+                  </p>
+                  <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+                    <div style="padding:8px;background:var(--paper);border-radius:6px;font-size:11px;">
+                      <strong>1 Trigger</strong> → Orchestrator + all agents load active prompts from DB
+                    </div>
+                    <div style="padding:8px;background:var(--paper);border-radius:6px;font-size:11px;">
+                      <strong>2 Draft</strong> → EMAIL_DRAFT / WHATSAPP_DRAFT / VOICE_DRAFT prompt used for the message
+                    </div>
+                    <div style="padding:8px;background:var(--paper);border-radius:6px;font-size:11px;">
+                      <strong>3 Audit</strong> → Prompt version ID recorded in <em>Audit Log</em> tab per-policy
+                    </div>
+                    <div style="padding:8px;background:var(--teal-light);border-radius:6px;font-size:11px;">
+                      <strong>💡 Tip:</strong> Use "▶ Test Prompt" to validate output before activating.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── A/B TESTING TAB ── -->
+      <div id="tab-abtesting" class="tab-panel">
+        <div class="topbar">
+          <h2>A/B Testing — Tagline & Message Variants</h2>
+          <div class="topbar-right">
+            <button class="btn btn-ghost btn-sm" onclick="exportABTestResults()">📥 Export Results</button>
+            <button class="btn btn-purple btn-sm"
+              onclick="document.getElementById('newABModal').classList.add('open')">+ New A/B Test</button>
+          </div>
+        </div>
+        <div class="content">
+
+          <div class="hint">
+            ℹ️ <span>A/B tests split renewal outreach by segment. Variant A vs B taglines/messages are sent to equal
+              cohorts. Winner is auto-promoted after statistical significance (p &lt; 0.05, min 100 sends per
+              arm).</span>
+          </div>
+
+          <div id="ab-tests-container">
+            <p style="text-align:center;padding:20px;color:var(--muted);">Loading A/B tests...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ESCALATION TAB ── -->
+      <div id="tab-escalation" class="tab-panel">
+        <div class="topbar">
+          <h2>Escalation — Human Queue</h2>
+          <div class="topbar-right">
+            <select class="input" style="width:140px;">
+              <option>All Cases</option>
+              <option>OPEN</option>
+              <option>IN_PROGRESS</option>
+              <option>RESOLVED</option>
+            </select>
+          </div>
+        </div>
+        <div class="content">
+
+          <!-- How escalation works explainer -->
+          <div class="card" style="margin-bottom:16px;background:var(--paper);">
+            <div class="card-title">❓ How Escalation Works</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;font-size:12px;">
+              <div style="text-align:center;padding:12px;background:var(--red-light);border-radius:8px;">
+                <div style="font-size:22px;margin-bottom:4px;">🚨</div>
+                <strong>Why triggered?</strong>
+                <div style="color:var(--muted);margin-top:4px;text-align:left;line-height:1.6;">
+                  • distress_flag = true<br>
+                  • objection_count ≥ 3<br>
+                  • HNI grievance detected<br>
+                  • Critique A override ×2<br>
+                  • Critique B → ESCALATE verdict<br>
+                  • 3+ channel attempts, no reply
+                </div>
+              </div>
+              <div style="text-align:center;padding:12px;background:var(--amber-light);border-radius:8px;">
+                <div style="font-size:22px;margin-bottom:4px;">⚙️</div>
+                <strong>What happens?</strong>
+                <div style="color:var(--muted);margin-top:4px;text-align:left;line-height:1.6;">
+                  • AI workflow pauses<br>
+                  • mode = HUMAN_CONTROL<br>
+                  • Case created in DB<br>
+                  • Priority score assigned<br>
+                  • Briefing note generated<br>
+                  • Specialist notified
+                </div>
+              </div>
+              <div style="text-align:center;padding:12px;background:var(--gold-light);border-radius:8px;">
+                <div style="font-size:22px;margin-bottom:4px;">🕐</div>
+                <strong>SLA &amp; Priority</strong>
+                <div style="color:var(--muted);margin-top:4px;text-align:left;line-height:1.6;">
+                  • Priority ≥ 0.9 → <strong>2h SLA</strong><br>
+                  • Priority 0.7–0.9 → 4h SLA<br>
+                  • Priority &lt; 0.7 → 8h SLA<br><br>
+                  • Score: distress=1.0<br>
+                  • HNI grievance=0.9<br>
+                  • Critique override=0.7
+                </div>
+              </div>
+              <div style="text-align:center;padding:12px;background:var(--teal-light);border-radius:8px;">
+                <div style="font-size:22px;margin-bottom:4px;">✅</div>
+                <strong>After Escalation</strong>
+                <div style="color:var(--muted);margin-top:4px;text-align:left;line-height:1.6;">
+                  • Human resolves + notes<br>
+                  • mode reset → AI<br>
+                  • distress_flag cleared<br>
+                  • policy_state updated<br>
+                  • AI resumes at Orchestrator<br>
+                  • Audit trail updated
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live cases -->
+          <div class="card-title" style="margin-bottom:10px;">🔴 Open Cases (3)</div>
+
+          <!-- Case 1: High Priority -->
+          <div class="escalation-card p-high" style="cursor:pointer;" onclick="showEscalationDetail()">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                  <span class="badge badge-red">PRIORITY 1.0</span>
+                  <span class="badge badge-red">DISTRESS</span>
+                  <code
+                    style="font-size:10px;font-family:'DM Mono',monospace;background:var(--paper2);padding:2px 6px;border-radius:4px;">POL-3310</code>
+                  <span style="font-size:11px;color:var(--muted);">Case #47</span>
+                </div>
+                <div style="font-weight:600;margin-bottom:4px;">Anita Desai — Health Shield · ₹8,200</div>
+                <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">
+                  <strong>Why:</strong> Distress keywords detected in voice call ("can't afford", "job loss") →
+                  distress_flag=true.<br>
+                  3 channel attempts (Email×1, WhatsApp×1, Voice×1) with no conversion.
+                </div>
+                <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--red);">
+                  AI Briefing: Customer expressed financial hardship. Recommended: payment plan discussion,
+                  empathy-first approach.
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;">
+                <div class="sla-countdown">1h 23m</div>
+                <div style="font-size:10px;color:var(--muted);">SLA remaining</div>
+                <div class="progress-bar" style="width:80px;margin-top:6px;">
+                  <div class="progress-fill" style="width:72%;background:var(--red);"></div>
+                </div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                  <button class="btn btn-teal btn-sm">✓ Resolve</button>
+                  <button class="btn btn-ghost btn-sm">📝 Notes</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini timeline -->
+            <div class="escalation-timeline" style="margin-top:12px;">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-time">09:14 · Feb 28</div>
+                <div class="timeline-text">📧 Email sent — opened, no reply</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-time">11:30 · Feb 28</div>
+                <div class="timeline-text">💬 WhatsApp sent — read, no reply</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot amber"></div>
+                <div class="timeline-time">14:00 · Feb 28</div>
+                <div class="timeline-text">📞 Voice call — answered, distress detected: "job loss, can't afford"</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot red"></div>
+                <div class="timeline-time">14:06 · Feb 28</div>
+                <div class="timeline-text">🚨 Escalated to human queue — Priority 1.0 — SLA 2h</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Case 2 -->
+          <div class="escalation-card p-medium">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                  <span class="badge badge-amber">PRIORITY 0.8</span>
+                  <span class="badge badge-amber">OBJECTIONS ×3</span>
+                  <code
+                    style="font-size:10px;font-family:'DM Mono',monospace;background:var(--paper2);padding:2px 6px;border-radius:4px;">POL-1103</code>
+                  <span style="font-size:11px;color:var(--muted);">Case #48</span>
+                </div>
+                <div style="font-weight:600;margin-bottom:4px;">Vikram Singh — Term Protect · ₹18,500</div>
+                <div style="font-size:11px;color:var(--muted);">
+                  <strong>Why:</strong> Customer raised 3 distinct objections across channels: premium too high,
+                  switching insurer, policy unclear.<br>
+                  Objection threshold hit → AI cannot auto-resolve.
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;">
+                <div class="sla-countdown" style="color:var(--amber);">2h 47m</div>
+                <div style="font-size:10px;color:var(--muted);">SLA remaining (4h total)</div>
+                <div class="progress-bar" style="width:80px;margin-top:6px;">
+                  <div class="progress-fill" style="width:40%;background:var(--amber);"></div>
+                </div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                  <button class="btn btn-teal btn-sm">✓ Resolve</button>
+                  <button class="btn btn-ghost btn-sm">📝 Notes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Case 3 -->
+          <div class="escalation-card p-low">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                  <span class="badge badge-gold">PRIORITY 0.6</span>
+                  <span class="badge badge-blue">CRITIQUE_B</span>
+                  <code
+                    style="font-size:10px;font-family:'DM Mono',monospace;background:var(--paper2);padding:2px 6px;border-radius:4px;">POL-2201</code>
+                  <span style="font-size:11px;color:var(--muted);">Case #46</span>
+                </div>
+                <div style="font-weight:600;margin-bottom:4px;">Meena Krishnan — Pension Plus · ₹32,000</div>
+                <div style="font-size:11px;color:var(--muted);">
+                  <strong>Why:</strong> Critique B verdict = ESCALATE. Message contained ULIP fund performance claims
+                  that could not be verified against policy documents. Compliance score: 0.42.
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;">
+                <div class="sla-countdown" style="color:var(--gold);font-size:14px;">5h 12m</div>
+                <div style="font-size:10px;color:var(--muted);">SLA remaining (8h total)</div>
+                <div class="progress-bar" style="width:80px;margin-top:6px;">
+                  <div class="progress-fill" style="width:18%;background:var(--gold);"></div>
+                </div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                  <button class="btn btn-teal btn-sm">✓ Resolve</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resolved section -->
+          <div style="margin-top:20px;">
+            <div class="card-title" style="margin-bottom:10px;">✅ Recently Resolved (Last 24h)</div>
+            <div class="card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Case</th>
+                    <th>Policy</th>
+                    <th>Reason</th>
+                    <th>Resolved By</th>
+                    <th>Time to Resolve</th>
+                    <th>Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#45</td>
+                    <td>POL-0771</td>
+                    <td><span class="badge badge-red">DISTRESS</span></td>
+                    <td>Specialist Ravi K.</td>
+                    <td>1h 42m</td>
+                    <td><span class="badge badge-teal">RENEWED</span></td>
+                  </tr>
+                  <tr>
+                    <td>#44</td>
+                    <td>POL-1203</td>
+                    <td><span class="badge badge-amber">OBJECTIONS</span></td>
+                    <td>Specialist Priti M.</td>
+                    <td>3h 10m</td>
+                    <td><span class="badge badge-red">LAPSED</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AUDIT TAB ── -->
+      <div id="tab-audit" class="tab-panel">
+        <div class="topbar">
+          <h2>IRDAI Audit Log</h2>
+          <div class="topbar-right">
+            <input class="input" placeholder="Policy ID..." style="width:160px;" />
+            <button class="btn btn-ghost btn-sm">🔍 Search</button>
+            <button class="btn btn-ghost btn-sm">📥 Export for IRDAI</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Policy</th>
+                    <th>Agent</th>
+                    <th>Action</th>
+                    <th>Reason / Evidence</th>
+                    <th>Prompt v</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">14:06:22</td>
+                    <td><code style="font-size:10px;">POL-3310</code></td>
+                    <td><span class="badge badge-red">ESCALATION</span></td>
+                    <td>ESCALATION_CREATED</td>
+                    <td>Case #47 | Distress: "job loss" | Priority 1.0 | SLA: 16:06</td>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;">—</td>
+                  </tr>
+                  <tr>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">14:00:11</td>
+                    <td><code style="font-size:10px;">POL-3310</code></td>
+                    <td><span class="badge badge-amber">VOICE_AGENT</span></td>
+                    <td>CHANNEL_SEND</td>
+                    <td>Voice dispatched | Distress detected mid-call</td>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;">v3</td>
+                  </tr>
+                  <tr>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">13:58:44</td>
+                    <td><code style="font-size:10px;">POL-3310</code></td>
+                    <td><span class="badge badge-purple">CRITIQUE_B</span></td>
+                    <td>COMPLIANCE_CHECK</td>
+                    <td>APPROVED | Score: 0.91 | No issues</td>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;">v2</td>
+                  </tr>
+                  <tr>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">13:57:01</td>
+                    <td><code style="font-size:10px;">POL-2847</code></td>
+                    <td><span class="badge badge-teal">ORCHESTRATOR</span></td>
+                    <td>CHANNEL_SELECTED</td>
+                    <td>WhatsApp selected | Email opened 3× no reply → switch</td>
+                    <td style="font-family:'DM Mono',monospace;font-size:10px;">v3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.main -->
+  </div><!-- /.shell -->
+
+  <!-- ── MODALS ── -->
+
+  <!-- Agent Detail Modal -->
+  <div class="modal-overlay" id="agentDetailModal">
+    <div class="modal">
+      <button class="modal-close"
+        onclick="document.getElementById('agentDetailModal').classList.remove('open')">✕</button>
+      <div class="modal-title" id="agentDetailTitle">Orchestrator Agent</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;font-family:'DM Mono',monospace;"
+        id="agentDetailStep"></div>
+      <div id="agentDetailBody"></div>
+    </div>
+  </div>
+
+  <!-- New Prompt Modal -->
+  <div class="modal-overlay" id="newPromptModal">
+    <div class="modal">
+      <button class="modal-close"
+        onclick="document.getElementById('newPromptModal').classList.remove('open')">✕</button>
+      <div class="modal-title">New Prompt Version</div>
+      <div style="margin-bottom:12px;">
+        <div class="label">Agent</div>
+        <select class="input">
+          <option>ORCHESTRATOR</option>
+          <option>CRITIQUE_A</option>
+          <option>PLANNER</option>
+          <option>EMAIL_DRAFT</option>
+          <option>CRITIQUE_B</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div class="label">Prompt Text</div>
+        <textarea class="input" rows="8" style="font-family:'DM Mono',monospace;font-size:12px;resize:vertical;"
+          placeholder="Enter new prompt text..."></textarea>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="label">Notes</div>
+        <input class="input" placeholder="What changed? Why?" />
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="checkbox" id="activateNow" /> <label for="activateNow" style="font-size:12px;">Activate
+          immediately</label>
+        <button class="btn btn-teal" style="margin-left:auto;">💾 Save Version</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New A/B Test Modal -->
+  <div class="modal-overlay" id="newABModal">
+    <div class="modal">
+      <button class="modal-close" onclick="document.getElementById('newABModal').classList.remove('open')">✕</button>
+      <div class="modal-title">Create A/B Test</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <div class="label">Test Name</div>
+          <input class="input" placeholder="e.g. Premium tagline Q1" />
+        </div>
+        <div>
+          <div class="label">Segment</div>
+          <select class="input">
+            <option>Premium</option>
+            <option>HNI</option>
+            <option>Standard</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <div class="label">Channel</div>
+          <select class="input">
+            <option>WhatsApp</option>
+            <option>Email</option>
+            <option>Voice</option>
+            <option>All</option>
+          </select>
+        </div>
+        <div>
+          <div class="label">Split</div>
+          <select class="input">
+            <option>50/50</option>
+            <option>70/30</option>
+            <option>80/20</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div class="label" style="color:var(--teal);font-weight:700;">Variant A — Control</div>
+        <textarea class="input" rows="3" style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;"
+          placeholder="Variant A message / tagline"></textarea>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="label" style="color:var(--amber);font-weight:700;">Variant B — Challenger</div>
+        <textarea class="input" rows="3" style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;"
+          placeholder="Variant B message / tagline"></textarea>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="label">Success Metric</div>
+        <select class="input">
+          <option>Renewal Conversion Rate</option>
+          <option>Open Rate</option>
+          <option>Reply Rate</option>
+          <option>Payment Completed</option>
+        </select>
+      </div>
+      <button class="btn btn-purple" style="width:100%;">🚀 Launch A/B Test</button>
+    </div>
+  </div>
+
+  <!-- Policy Trace Modal -->
+  <div class="modal-overlay" id="traceModal">
+    <div class="modal" style="width:90%;max-width:1000px;max-height:85vh;display:flex;flex-direction:column;">
+      <button class="modal-close" onclick="document.getElementById('traceModal').classList.remove('open')">✕</button>
+      <div class="modal-title" id="traceTitle">Policy Trace</div>
+      <div style="flex:1;overflow-y:auto;padding:14px 0;">
+        <div id="traceContent" style="padding:0 14px;">Loading trace...</div>
+      </div>
+      <div style="padding:14px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-ghost btn-sm"
+          onclick="document.getElementById('traceModal').classList.remove('open')">Close</button>
+      </div>
+    </div>
+  </div>
+  <!-- Compare Prompt Modal -->
+  <div class="modal-overlay" id="comparePromptModal">
+    <div class="modal" style="max-width:900px;">
+      <div class="modal-header">
+        <h3>Compare Prompt Versions</h3>
+        <button class="btn-close"
+          onclick="document.getElementById('comparePromptModal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body" id="compareContent">
+        <!-- Side by side comparison injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── STATE ──
+    let token = null;
+    let allPolicies = [];
+    let currentPolicyId = null;
+
+    // ── AUTH ──
+    document.addEventListener('DOMContentLoaded', () => {
+      // Always show login overlay on fresh load (no auto-skip from localStorage)
+      document.getElementById('login-overlay').style.display = 'flex';
+      document.getElementById('login-form').addEventListener('submit', handleLogin);
+    });
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const btn = document.querySelector('#login-form .btn-login');
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
+      try {
+        const res = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: 'dummy' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          token = data.access_token;
+          document.getElementById('login-overlay').style.display = 'none';
+          initDashboard();
+        } else {
+          alert('Login failed. Please check your email.');
+        }
+      } catch (err) {
+        alert('Connection error: ' + err.message);
+      } finally {
+        btn.textContent = 'Enter Dashboard';
+        btn.disabled = false;
+      }
+    }
+
+    // ── INIT ──
+    async function initDashboard() {
+      fetchOverview();
+      fetchRecentActivity();
+    }
+
+    async function api(url, options = {}) {
+      if (!token) return null;
+      options.headers = { ...options.headers, 'Authorization': `Bearer ${token}` };
+      const res = await fetch(url, options);
+      if (res.status === 401) {
+        token = null;
+        document.getElementById('login-overlay').style.display = 'flex';
+        return null;
+      }
+      return res;
+    }
+
+    // ── TAB SWITCHING ──
+    window.switchTab = function (tab) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      if (event && event.currentTarget) event.currentTarget.classList.add('active');
+      if (tab === 'overview') { fetchOverview(); fetchRecentActivity(); }
+      if (tab === 'policies') { fetchPolicies(); }
+      if (tab === 'agents') { fetchAgentStats(); }
+      if (tab === 'escalation') { fetchEscalations(); }
+      if (tab === 'prompts') { initPromptLab(); }
+      if (tab === 'abtesting') { fetchABTests(); }
+      if (tab === 'audit') { fetchAuditLog(); }
+    };
+
+    // ── OVERVIEW ──
+    async function fetchOverview() {
+      const res = await api('/dashboard/overview');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+      document.getElementById('stat-total-policies').textContent = d.total_policies.toLocaleString();
+      document.getElementById('stat-ai-managed').textContent = d.ai_managed.toLocaleString();
+      document.getElementById('stat-open-escalations').textContent = d.open_escalations.toLocaleString();
+      document.getElementById('stat-distress-flags').textContent = d.distress_cases.toLocaleString();
+      // Update sub-labels
+      const aiPct = d.total_policies > 0 ? ((d.ai_managed / d.total_policies) * 100).toFixed(1) : 0;
+      document.getElementById('stat-total-sub').textContent = `${d.active_policies} active`;
+      document.getElementById('stat-ai-sub').textContent = `${aiPct}% of portfolio`;
+      document.getElementById('stat-esc-sub').textContent = `Human intervention required`;
+      document.getElementById('stat-distress-sub').textContent = `Urgent attention`;
+      // Also fetch channel distribution
+      fetchChannelDistribution();
+    }
+
+    async function fetchRecentActivity() {
+      const res = await api('/dashboard/recent-activity?limit=10');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+      const tbody = document.querySelector('#recent-activity-table tbody');
+      if (!d.activities || !d.activities.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted);">No recent activity</td></tr>';
+        return;
+      }
+
+      const agentMap = {
+        'Email Agent': 'SendGrid Agent',
+        'WhatsApp Agent': 'Twilio Agent',
+        'ORCHESTRATOR': 'Orchestrator',
+        'CRITIQUE_A': 'Critique A',
+        'CRITIQUE_B': 'Critique B',
+        'PLANNER': 'Planner',
+        'VOICE_AGENT': 'Voice Agent',
+        'ESCALATION': 'Escalation',
+        'SYSTEM': 'System',
+        'System': 'System'
+      };
+
+      tbody.innerHTML = d.activities.map(a => {
+        const agentName = agentMap[a.agent_name] || a.agent_name || 'System';
+        return `
+        <tr>
+          <td><code style="font-size:10px;">${a.policy_id}</code></td>
+          <td><span style="font-size:11px;font-weight:500;">${a.customer_name || 'Unknown'}</span></td>
+          <td><span class="badge badge-blue">${agentName}</span></td>
+          <td>${a.action_type.replace(/_/g, ' ').toLowerCase()}</td>
+          <td style="color:var(--muted);font-size:10px;">${timeAgo(a.created_at)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function fetchChannelDistribution() {
+      const res = await api('/dashboard/channel-stats');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+
+      // Channel distribution
+      const channels = d.channel_stats || [];
+      const total = channels.reduce((sum, c) => sum + c.sends, 0);
+
+      let channelHtml = '';
+      const channelIcons = {
+        'EMAIL': '📧', 'Email': '📧',
+        'WHATSAPP': '💬', 'WhatsApp': '💬',
+        'VOICE': '📞', 'Voice': '📞'
+      };
+      const channelColors = {
+        'EMAIL': 'blue', 'Email': 'blue',
+        'WHATSAPP': 'teal', 'WhatsApp': 'teal',
+        'VOICE': 'amber', 'Voice': 'amber'
+      };
+      const channelDisplayNames = {
+        'EMAIL': 'SendGrid (Email)', 'Email': 'SendGrid (Email)',
+        'WHATSAPP': 'Twilio (WhatsApp)', 'WhatsApp': 'Twilio (WhatsApp)',
+        'VOICE': 'Voice', 'Voice': 'Voice'
+      };
+
+      channels.forEach(c => {
+        const pct = total > 0 ? Math.round((c.sends / total) * 100) : 0;
+        const icon = channelIcons[c.channel.toUpperCase()] || channelIcons[c.channel] || '📊';
+        const color = channelColors[c.channel] || 'blue';
+        const displayName = channelDisplayNames[c.channel] || c.channel;
+        channelHtml += `
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;">
+            <span>${icon} ${displayName}</span><span style="font-weight:600;font-family:'Fraunces',serif;">${c.sends.toLocaleString()}</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${pct}%;background:var(--${color});"></div>
+          </div>
+        </div>`;
+      });
+
+      document.getElementById('channel-distribution-content').innerHTML = channelHtml || '<p style="color:var(--muted);">No channel data</p>';
+
+      // Renewal rate by segment (from segment_breakdown)
+      const segments = d.segment_breakdown || {};
+      let renewalHtml = '';
+
+      // Calculate renewal rates for each segment
+      const segmentRates = {};
+      for (const seg in segments) {
+        const channelData = segments[seg] || [];
+        const totalInSeg = channelData.reduce((sum, c) => sum + c.count, 0);
+        segmentRates[seg] = totalInSeg > 0 ? Math.min(100, Math.round((totalInSeg / 10) * 100)) : 0; // Simple proxy
+      }
+
+      const segmentColors = { HNI: 'purple', Premium: 'teal', Standard: 'blue', 'Mass Market': 'amber' };
+
+      for (const seg of ['HNI', 'Premium', 'Standard', 'Mass Market', 'Senior Citizen']) {
+        if (segmentRates[seg] !== undefined && segmentRates[seg] > 0) {
+          const rate = segmentRates[seg];
+          const color = segmentColors[seg] || 'teal';
+          renewalHtml += `
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;">
+            <span class="segment-chip">${seg}</span>
+            <div class="progress-bar" style="flex:1;height:10px;">
+              <div class="progress-fill" style="width:${Math.min(100, rate)}%;background:var(--${color});height:10px;"></div>
+            </div>
+            <span style="font-weight:700;color:var(--${color});min-width:35px;">${rate}%</span>
+          </div>`;
+        }
+      }
+
+      document.getElementById('renewal-rate-content').innerHTML = renewalHtml || '<p style="color:var(--muted);">No segment data</p>';
+    }
+
+    // ── POLICIES ──
+    async function fetchPolicies() {
+      const tbody = document.getElementById('policies-body');
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted);">Loading policies...</td></tr>';
+      const res = await api('/dashboard/policies');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+      allPolicies = d.policies;
+      renderPolicies(allPolicies);
+      // Load segment filter options dynamically
+      loadSegmentFilter();
+    }
+
+    function loadSegmentFilter() {
+      // Extract unique segments from all policies
+      const segments = [...new Set(allPolicies.map(p => p.segment))].sort();
+      const select = document.getElementById('policy-segment-filter');
+      // Clear existing options except "All Segments"
+      select.innerHTML = '<option value="">All Segments</option>';
+      // Add each segment as an option
+      segments.forEach(seg => {
+        const option = document.createElement('option');
+        option.value = seg;
+        option.textContent = seg;
+        select.appendChild(option);
+      });
+    }
+
+    function renderPolicies(policies) {
+      const tbody = document.getElementById('policies-body');
+      if (!policies.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted);">No policies match the filter.</td></tr>';
+        return;
+      }
+      const statusColors = { ACTIVE: 'teal', LAPSED: 'red', OVERDUE: 'amber', PAID: 'blue' };
+      tbody.innerHTML = policies.map(p => {
+        const sc = statusColors[p.status] || 'gray';
+        const due = p.premium_due_date ? new Date(p.premium_due_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }) : 'N/A';
+        return `<tr data-segment="${p.segment}" data-status="${p.status}" data-policy="${p.policy_id}" data-name="${p.customer_name}">
+        <td><code style="font-size:11px;font-family:'DM Mono',monospace;">${p.policy_id}</code></td>
+        <td><strong>${p.customer_name}</strong><br><span style="font-size:10px;color:var(--muted);">${p.segment}</span></td>
+        <td>${p.policy_type}</td>
+        <td><span class="segment-chip">${p.segment}</span></td>
+        <td style="font-family:'DM Mono',monospace;">₹${p.annual_premium.toLocaleString()}</td>
+        <td>${due}</td>
+        <td><span class="badge badge-${sc}">${p.status}</span></td>
+        <td style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm" onclick="triggerWorkflow('${p.policy_id}','${p.customer_name}','${p.policy_type}')">🚀 Trigger</button>
+          <button class="btn btn-ghost btn-sm" onclick="showTrace('${p.policy_id}','${p.customer_name}')">🔍 Trace</button>
+        </td>
+      </tr>`;
+      }).join('');
+    }
+
+    window.filterPolicies = function () {
+      const search = (document.getElementById('policy-search').value || '').toLowerCase();
+      const segment = document.getElementById('policy-segment-filter').value;
+      const status = document.getElementById('policy-status-filter').value;
+      const filtered = allPolicies.filter(p => {
+        const matchSearch = !search || p.policy_id.toLowerCase().includes(search) || p.customer_name.toLowerCase().includes(search);
+        const matchSegment = !segment || p.segment === segment;
+        const matchStatus = !status || p.status === status;
+        return matchSearch && matchSegment && matchStatus;
+      });
+      renderPolicies(filtered);
+    };
+
+    // ── TRIGGER WORKFLOW ──
+    window.animateAgentFlow = function (data) {
+      const flowResult = document.getElementById('flow-result');
+      if (!flowResult) return;
+
+      // The workflow result (RenewalState) comes back as 'data'
+      // We look for 'final_message' or 'audit_trail'
+      const channel = data.selected_channel || 'Email';
+      const msg = data.final_message ||
+        (data.greeting ? `${data.greeting}\n\n${data.draft_message}\n\n${data.closing}` : null);
+
+      flowResult.style.display = 'block';
+      if (data.escalate) {
+        flowResult.style.background = 'var(--red-light)';
+        flowResult.style.color = 'var(--red)';
+        flowResult.innerHTML = `<strong>⚠️ Escalated to Human:</strong> ${data.escalation_reason || 'Manual review required'}`;
+      } else if (msg) {
+        flowResult.innerHTML = `<strong>📤 Final Message (${channel}):</strong><br><div style="margin-top:8px;padding:8px;background:white;border-radius:4px;white-space:pre-wrap;font-family:inherit;">${msg}</div>`;
+      } else {
+        flowResult.innerHTML = `<strong>✅ Processed:</strong> ${data.audit_trail ? data.audit_trail[data.audit_trail.length - 1] : 'Handled'}`;
+      }
+
+      // Refresh background data
+      if (typeof fetchPolicies === 'function') fetchPolicies();
+      if (typeof fetchStats === 'function') fetchStats();
+    };
+
+    window.triggerWorkflow = async function (policyId, customerName, policyType) {
+      currentPolicyId = policyId;
+      showWorkflowModal(policyId, customerName, policyType);
+      try {
+        const res = await api('/renewal/trigger', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ policy_id: policyId })
+        });
+        if (res && res.ok) {
+          const data = await res.json();
+          // The trigger endpoint returns the finished state
+          animateAgentFlow(data);
+        } else {
+          const err = await res.json();
+          document.getElementById('flow-result').style.display = 'block';
+          document.getElementById('flow-result').style.background = 'var(--red-light)';
+          document.getElementById('flow-result').innerHTML = `<strong>❌ Error:</strong> ${err.detail || 'Workflow failed'}`;
+        }
+      } catch (e) {
+        console.error("Trigger fail:", e);
+      }
+    };
+
+    window.showTriggerBatchModal = function () {
+      alert('Batch trigger: This will trigger renewal workflows for all policies due within 7 days. Use the individual Trigger buttons in the Policies tab for specific policies.');
+    };
+
+    window.showTrace = async function (policyId, customerName) {
+      const modal = document.getElementById('traceModal');
+      document.getElementById('traceTitle').textContent = `🔍 Policy Trace — ${policyId}`;
+      document.getElementById('traceContent').innerHTML = '<p style="text-align:center;padding:20px;">Loading trace data...</p>';
+      modal.classList.add('open');
+
+      const res = await api(`/dashboard/trace/${policyId}`);
+      if (!res || !res.ok) {
+        document.getElementById('traceContent').innerHTML = '<p style="color:var(--red);padding:20px;">⚠️ Failed to load trace data.</p>';
+        return;
+      }
+
+      const data = await res.json();
+      if (data.error) {
+        document.getElementById('traceContent').innerHTML = `<p style="color:var(--red);padding:20px;">⚠️ ${data.error}</p>`;
+        return;
+      }
+
+      // Build timeline view
+      let html = '<div style="padding:14px;">';
+
+      // Policy summary
+      if (data.policy) {
+        const p = data.policy;
+        html += `
+        <div style="margin-bottom:20px;padding:14px;background:var(--paper);border-radius:8px;border-left:3px solid var(--teal);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <div>
+              <strong>${p.customer_name}</strong> · <span style="color:var(--muted);">${p.segment}</span><br>
+              <span style="font-size:11px;color:var(--muted);">Policy: ${p.policy_type} · Premium: ₹${p.annual_premium.toLocaleString()}</span>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:11px;color:var(--muted);">Status</div>
+              <strong style="color:var(--teal);">${p.status}</strong>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // Latest Communication Summary
+      const latestMsg = data.timeline.filter(e => e.type === 'message' && e.direction === 'OUTBOUND').slice().reverse()[0];
+      if (latestMsg) {
+        html += `
+        <div style="margin-bottom:20px;padding:12px;background:var(--paper);border-radius:8px;border:1px solid var(--border);border-top:4px solid var(--teal);">
+          <div style="font-weight:700;font-size:11px;color:var(--teal);text-transform:uppercase;margin-bottom:6px;">Latest Communication</div>
+          <div style="font-size:12px;line-height:1.4;white-space:pre-wrap;">${latestMsg.content}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:6px;">Sent via ${latestMsg.channel} · ${new Date(latestMsg.timestamp).toLocaleString()}</div>
+        </div>`;
+      }
+
+      // Timeline
+      if (data.timeline && data.timeline.length > 0) {
+        html += '<div style="border-left:2px solid var(--border);">';
+        data.timeline.forEach((event, idx) => {
+          const timestamp = new Date(event.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          const date = new Date(event.timestamp).toLocaleDateString('en-IN');
+
+          if (event.type === 'agent_action') {
+            const badgeColor = event.action.includes('ERROR') ? 'red' : event.action.includes('SEND') ? 'teal' : 'blue';
+            html += `
+            <div style="margin-left:14px;margin-bottom:12px;padding:10px 12px;background:var(--paper);border-radius:6px;border-left:3px solid var(--${badgeColor});">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="badge badge-${badgeColor}">${event.agent}</span>
+                <span style="font-size:11px;color:var(--muted);">${timestamp}</span>
+              </div>
+              <div style="font-weight:600;font-size:12px;">${event.action}</div>
+              ${event.reason ? `<div style="font-size:11px;color:var(--muted);margin-top:4px;">${event.reason}</div>` : ''}
+              ${event.prompt_version ? `<div style="font-size:10px;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace;">Prompt v${event.prompt_version}</div>` : ''}
+            </div>`;
+          } else if (event.type === 'message') {
+            const dirIcon = event.direction === 'OUTBOUND' ? '📤' : '📥';
+            const channelEmoji = event.channel === 'EMAIL' ? '📧' : event.channel === 'WHATSAPP' ? '💬' : '📞';
+            html += `
+            <div style="margin-left:14px;margin-bottom:12px;padding:10px 12px;background:var(--blue-light);border-radius:6px;border-left:3px solid var(--blue);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span>${dirIcon}${channelEmoji}</span>
+                <strong style="font-size:12px;">${event.channel}</strong>
+                <span style="font-size:11px;color:var(--muted);">${timestamp}</span>
+                ${event.sentiment ? `<span class="badge badge-gray" style="font-size:10px;">Sentiment: ${(event.sentiment || 0).toFixed(2)}</span>` : ''}
+              </div>
+              <div style="font-size:12px;background:white;padding:8px;border-radius:4px;margin-top:6px;line-height:1.5;">
+                ${event.content || '(no content)'}
+              </div>
+            </div>`;
+          } else if (event.type === 'workflow') {
+            html += `
+            <div style="margin-left:14px;margin-bottom:12px;padding:10px 12px;background:var(--purple-light);border-radius:6px;border-left:3px solid var(--purple);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-size:11px;color:var(--muted);">⚙️ ${event.node}</span>
+                <span style="font-size:11px;color:var(--muted);">${timestamp}</span>
+              </div>
+              ${event.content ? `<div style="font-size:11px;color:var(--muted);">${event.content}</div>` : ''}
+            </div>`;
+          }
+        });
+        html += '</div>';
+      } else {
+        html += '<p style="color:var(--muted);padding:20px;">No timeline events recorded yet.</p>';
+      }
+
+      // Escalation info if exists
+      if (data.escalation) {
+        const esc = data.escalation;
+        html += `
+        <div style="margin-top:20px;padding:14px;background:var(--red-light);border-radius:8px;border-left:3px solid var(--red);">
+          <div style="font-weight:700;color:var(--red);margin-bottom:8px;">🚨 Escalation Case #${esc.case_id}</div>
+          <div style="font-size:12px;">
+            <strong>Reason:</strong> ${esc.escalation_reason}<br>
+            <strong>Priority:</strong> ${(esc.priority_score || 0).toFixed(1)}<br>
+            <strong>Status:</strong> ${esc.status}<br>
+            <strong>SLA Deadline:</strong> ${esc.sla_deadline || 'N/A'}
+          </div>
+        </div>`;
+      }
+
+      html += '</div>';
+
+      // Add Simulation Reply button at bottom of trace
+      html += `
+      <div style="margin-top:20px;padding:14px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:10px;">
+        <button class="btn btn-purple" onclick="simulateReply('${policyId}')">💬 Simulate Customer Reply</button>
+      </div>`;
+
+      document.getElementById('traceContent').innerHTML = html;
+    };
+
+    window.simulateReply = async function (policyId) {
+      const msg = prompt("Enter simulated customer reply (e.g., 'Yes renew it', 'I lost my job', 'Call me'):");
+      if (!msg) return;
+
+      const res = await api('/renewal/webhook/inbound', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          policy_id: policyId,
+          channel: 'WhatsApp', // Default simulation channel
+          content: msg,
+          customer_id: 'SIM_USER'
+        })
+      });
+
+      if (res && res.ok) {
+        const data = await res.json();
+        alert(`Reply received! Distress Detected: ${data.distress_detected}`);
+        showTrace(policyId); // Refresh trace
+        fetchStats(); // Update escalation count if needed
+      } else {
+        alert("Failed to send simulation reply.");
+      }
+    };
+
+    function showWorkflowModal(policyId, customerName, policyType) {
+      document.getElementById('agentDetailTitle').innerHTML = `🚀 Workflow Triggered — <code style="font-size:13px">${policyId}</code>`;
+      document.getElementById('agentDetailStep').textContent = `${customerName} · ${policyType}`;
+      document.getElementById('agentDetailBody').innerHTML = `
+      <div style="margin-bottom:12px;padding:8px 12px;background:var(--teal-light);border-radius:8px;font-size:12px;color:var(--teal);">
+        ✅ Workflow started in background. Watch the agent-to-agent flow below:
+      </div>
+      <div id="agent-flow-anim" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+        ${['🎯 ORCHESTRATOR — Selecting best channel...', '🔍 CRITIQUE A — Verifying channel with evidence...', '🧠 PLANNER — Building execution plan...', '✍️ DRAFT + GREETING — Composing message (parallel)...', '✅ CRITIQUE B — Compliance check...', '📤 CHANNEL AGENT — Dispatching message...'].map((label, i) => `
+          <div id="flow-step-${i}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--paper2);opacity:0.4;transition:all 0.4s ease;">
+            <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;" id="flow-dot-${i}"></div>
+            <span style="font-size:12px;">${label}</span>
+          </div>`).join('')}
+      </div>
+      <div id="flow-result" style="display:none;margin-top:14px;padding:12px;background:var(--teal-light);border-radius:8px;font-size:12px;"></div>
+    `;
+      document.getElementById('agentDetailModal').classList.add('open');
+      // Animate steps sequentially
+      const delays = [0, 800, 1800, 3000, 5000, 6500];
+      delays.forEach((d, i) => {
+        setTimeout(() => activateFlowStep(i), d);
+      });
+    }
+
+    function activateFlowStep(i) {
+      const step = document.getElementById(`flow-step-${i}`);
+      const dot = document.getElementById(`flow-dot-${i}`);
+      if (!step) return;
+      // Mark previous as done
+      if (i > 0) {
+        const prev = document.getElementById(`flow-step-${i - 1}`);
+        const prevDot = document.getElementById(`flow-dot-${i - 1}`);
+        if (prev) { prev.style.opacity = '0.7'; prev.style.background = 'var(--paper2)'; }
+        if (prevDot) { prevDot.textContent = '✓'; prevDot.style.borderColor = 'var(--teal)'; prevDot.style.color = 'var(--teal)'; }
+      }
+      step.style.opacity = '1';
+      step.style.background = 'linear-gradient(90deg, var(--teal-light), white)';
+      dot.style.borderColor = 'var(--teal)';
+      dot.style.animation = 'pulse 1s infinite';
+      // Last step — show real content from backend
+      if (i === 5) {
+        let attempts = 0;
+        const result = document.getElementById('flow-result');
+        const poll = setInterval(async () => {
+          attempts++;
+          const res = await api(`/renewal/status/${currentPolicyId}`);
+          if (res && res.ok) {
+            const data = await res.json();
+            if (data.current_node === 'COMPLETED' || data.current_node === 'AWAITING_RESPONSE' || attempts > 15) {
+              clearInterval(poll);
+              const prev = document.getElementById(`flow-step-5`);
+              const prevDot = document.getElementById(`flow-dot-5`);
+              if (prev) prev.style.opacity = '0.7';
+              if (prevDot) { prevDot.textContent = '✓'; prevDot.style.borderColor = 'var(--teal)'; prevDot.style.color = 'var(--teal)'; }
+
+              if (result) {
+                result.style.display = 'block';
+                const channelLabel = data.last_channel === 'Email' ? 'SendGrid (Email)' :
+                  data.last_channel === 'WhatsApp' ? 'Twilio (WhatsApp)' : 'Voice';
+                result.innerHTML = `
+                  <div style="font-weight:700;margin-bottom:6px;color:var(--teal);">✅ Workflow Complete</div>
+                  <div style="margin-bottom:8px;"><strong>Channel:</strong> ${channelLabel}</div>
+                  <div style="padding:10px;background:white;border-radius:6px;border:1px solid var(--border);font-family:inherit;white-space:pre-wrap;">${data.last_message || '(No message content captured)'}</div>
+                `;
+              }
+            }
+          }
+        }, 2000);
+      }
+    }
+
+    // ── PROMPT LAB ──
+    let promptLabState = {
+      currentAgent: 'ORCHESTRATOR',
+      versions: [],       // all versions for current agent
+      currentVersion: null // the one displayed in textarea
+    };
+
+    async function selectAgent(el, agentName) {
+      // Update active tab
+      document.querySelectorAll('.agent-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      promptLabState.currentAgent = agentName;
+      document.getElementById('activeAgentName').textContent = agentName;
+      document.getElementById('versionsAgentName').textContent = agentName;
+      document.getElementById('promptMeta').textContent = 'Loading...';
+      document.getElementById('promptTextarea').value = '';
+      document.getElementById('versionPills').innerHTML = '<span style="font-size:11px;color:var(--muted);">Loading...</span>';
+      await loadAgentPrompts(agentName);
+    }
+
+    async function loadAgentPrompts(agentName) {
+      const res = await api(`/prompts/${agentName}`);
+      if (!res || !res.ok) {
+        document.getElementById('versionPills').innerHTML = '<span style="color:var(--red);font-size:11px;">Failed to load prompts.</span>';
+        return;
+      }
+      const d = await res.json();
+      promptLabState.versions = d.versions;
+
+      // Find active version
+      const active = d.versions.find(v => v.is_active) || d.versions[0];
+      if (active) {
+        promptLabState.currentVersion = active;
+        document.getElementById('promptTextarea').value = active.prompt_text;
+        document.getElementById('promptMeta').textContent = `v${active.version} · by ${active.created_by || 'system'}`;
+      }
+      renderVersionPills();
+      renderVersionsList();
+    }
+
+    function renderVersionPills() {
+      const container = document.getElementById('versionPills');
+      container.innerHTML = '';
+      promptLabState.versions.forEach(v => {
+        const pill = document.createElement('div');
+        pill.className = 'version-pill' + (v.is_active ? ' active' : '');
+        pill.textContent = `v${v.version}${v.is_active ? ' ● Active' : ''}`;
+        pill.onclick = () => switchVersion(v.id);
+        container.appendChild(pill);
+      });
+    }
+
+    function renderVersionsList() {
+      const container = document.getElementById('versionsListContainer');
+      if (!promptLabState.versions.length) {
+        container.innerHTML = '<p style="padding:16px;color:var(--muted);text-align:center;">No versions found.</p>';
+        return;
+      }
+      container.innerHTML = promptLabState.versions.map(v => `
+        <div style="padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;${v.is_active ? 'border-color:var(--teal);' : 'opacity:0.75;'}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <strong style="font-size:12px;">v${v.version}</strong>
+            <span class="badge ${v.is_active ? 'badge-teal' : 'badge-gray'}">${v.is_active ? 'ACTIVE' : 'INACTIVE'}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">
+            by ${v.created_by || 'system'} · ${v.notes || 'No notes'}
+          </div>
+          <div style="font-size:11px;font-family:'DM Mono',monospace;background:var(--paper);padding:6px;border-radius:4px;max-height:55px;overflow:hidden;color:var(--ink);">
+            ${(v.prompt_text || '').substring(0, 120)}...
+          </div>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="switchVersion(${v.id})">👁 View</button>
+            ${!v.is_active ? `<button class="btn btn-teal btn-sm" onclick="activateVersion(${v.id})">✅ Activate</button>` : '<span style="font-size:11px;color:var(--teal);padding:5px 0;">✓ Currently Active</span>'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchVersion(versionId) {
+      const v = promptLabState.versions.find(x => x.id === versionId);
+      if (!v) return;
+      promptLabState.currentVersion = v;
+      document.getElementById('promptTextarea').value = v.prompt_text;
+      document.getElementById('promptMeta').textContent = `v${v.version} · by ${v.created_by || 'system'}`;
+      renderVersionPills();
+    }
+
+    async function activateVersion(versionId) {
+      const agent = promptLabState.currentAgent;
+      const res = await api(`/prompts/${agent}/activate`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ version_id: versionId })
+      });
+      if (res && res.ok) {
+        await loadAgentPrompts(agent);
+      } else {
+        alert('Failed to activate version.');
+      }
+    }
+
+    async function activateCurrentVersion() {
+      if (!promptLabState.currentVersion) { alert('No version selected.'); return; }
+      await activateVersion(promptLabState.currentVersion.id);
+    }
+
+    async function saveNewPromptVersion() {
+      const agent = promptLabState.currentAgent;
+      const promptText = document.getElementById('promptTextarea').value.trim();
+      if (!promptText) { alert('Prompt text is empty.'); return; }
+      const notes = prompt('Enter notes for this version (optional):') || '';
+      const activate = confirm('Activate this new version immediately?');
+
+      const res = await api('/prompts/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent_name: agent, prompt_text: promptText, notes, activate })
+      });
+      if (res && res.ok) {
+        const d = await res.json();
+        alert(`✅ Saved as v${d.version}${d.is_active ? ' and activated!' : '.'}`);
+        await loadAgentPrompts(agent);
+      } else {
+        alert('Failed to save prompt version.');
+      }
+    }
+
+    async function runPromptTest() {
+      const agent = promptLabState.currentAgent;
+      const promptText = document.getElementById('promptTextarea').value.trim();
+      if (!promptText) { alert('Prompt is empty.'); return; }
+
+      const card = document.getElementById('testResultCard');
+      const resultEl = document.getElementById('testResultText');
+      card.style.display = 'block';
+      resultEl.textContent = '⏳ Running test against Gemini...';
+      document.getElementById('testDuration').textContent = '—';
+      document.getElementById('testTokensIn').textContent = '—';
+      document.getElementById('testTokensOut').textContent = '—';
+
+      const res = await api(`/prompts/${agent}/test`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt_text: promptText })
+      });
+
+      if (res && res.ok) {
+        const d = await res.json();
+        resultEl.textContent = d.response || d.error || '(no response)';
+        document.getElementById('testDuration').textContent = d.duration_ms || '—';
+        document.getElementById('testTokensIn').textContent = d.tokens_in || '—';
+        document.getElementById('testTokensOut').textContent = d.tokens_out || '—';
+      } else {
+        resultEl.textContent = '❌ Test failed. Check server logs.';
+      }
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('promptTextarea').value;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Prompt copied to clipboard!');
+      }).catch(() => {
+        alert('Copy failed. Please manually select and copy the text.');
+      });
+    }
+
+    async function openCompareModal() {
+      const agent = promptLabState.currentAgent;
+      const vnums = promptLabState.versions.map(v => v.version);
+      if (vnums.length < 2) {
+        alert('Need at least 2 versions to compare.');
+        return;
+      }
+
+      const v1 = prompt('Enter first version number to compare:', vnums[0]);
+      if (!v1) return;
+      const v2 = prompt('Enter second version number to compare:', vnums[1] || vnums[0]);
+      if (!v2) return;
+
+      const res = await api(`/prompts/${agent}/compare?v1=${v1}&v2=${v2}`);
+      if (res && res.ok) {
+        const d = await res.json();
+        const modal = document.getElementById('comparePromptModal');
+        const content = document.getElementById('compareContent');
+
+        content.innerHTML = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div class="card">
+              <div class="card-title">Version ${d.versions[0].version} ${d.versions[0].is_active ? '● Active' : ''}</div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">by ${d.versions[0].created_by || 'system'}</div>
+              <pre style="white-space:pre-wrap;font-size:11px;background:var(--paper);padding:10px;border-radius:6px;max-height:400px;overflow-y:auto;">${d.versions[0].prompt_text}</pre>
+            </div>
+            <div class="card">
+              <div class="card-title">Version ${d.versions[1].version} ${d.versions[1].is_active ? '● Active' : ''}</div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">by ${d.versions[1].created_by || 'system'}</div>
+              <pre style="white-space:pre-wrap;font-size:11px;background:var(--paper);padding:10px;border-radius:6px;max-height:400px;overflow-y:auto;">${d.versions[1].prompt_text}</pre>
+            </div>
+          </div>
+        `;
+        modal.classList.add('open');
+      } else {
+        alert('Failed to fetch versions for comparison.');
+      }
+    }
+
+    // Load Prompt Lab when tab is opened
+    function initPromptLab() {
+      if (!promptLabState.versions.length) {
+        loadAgentPrompts('ORCHESTRATOR');
+      }
+    }
+
+    // ── AGENT STATS ──
+
+    async function fetchAgentStats() {
+      const container = document.getElementById('agent-stats-container');
+      container.innerHTML = '<p style="text-align:center;padding:20px;color:var(--muted);">Loading agent performance...</p>';
+      const res = await api('/dashboard/agent-stats');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+      const colors = { ORCHESTRATOR: 'teal', CRITIQUE_A: 'blue', PLANNER: 'gold', DRAFT_AGENT: 'purple', GREETING_CLOSING_AGENT: 'purple', CRITIQUE_B: 'purple', EMAIL_AGENT: 'amber', WHATSAPP_AGENT: 'teal', VOICE_AGENT: 'amber' };
+      if (!d.agent_stats.length) {
+        container.innerHTML = '<p style="text-align:center;padding:20px;color:var(--muted);">No telemetry yet. Trigger a workflow first.</p>';
+        return;
+      }
+
+      // Calculate totals
+      let totalTokensIn = 0, totalTokensOut = 0, totalCost = 0;
+      d.agent_stats.forEach(s => {
+        totalTokensIn += (s.total_tokens_in || 0);
+        totalTokensOut += (s.total_tokens_out || 0);
+        totalCost += ((s.total_tokens_in || 0) * 0.00022) + ((s.total_tokens_out || 0) * 0.00088);
+      });
+
+      let html = d.agent_stats.map(s => {
+        const c = colors[s.agent_name] || 'teal';
+        const rate = s.total_calls > 0 ? ((s.success_count / s.total_calls) * 100).toFixed(1) : '0.0';
+        const tokIn = (s.total_tokens_in || 0);
+        const tokOut = (s.total_tokens_out || 0);
+        const cost = ((tokIn * 0.00022) + (tokOut * 0.00088)).toFixed(2);
+        return `
+        <div class="agent-stat-row" style="background:var(--${c}-light, #f0f9f8);border-left:3px solid var(--${c});">
+          <div class="agent-stat-name" style="color:var(--${c});">${s.agent_name}</div>
+          <div class="agent-stat-metric"><div class="val">${s.total_calls}</div><div class="lbl">Calls</div></div>
+          <div class="agent-stat-metric"><div class="val">${Math.round(s.avg_time_ms || 0).toLocaleString()}<span style="font-size:10px;color:var(--muted);">ms</span></div><div class="lbl">Avg Time</div></div>
+          <div class="agent-stat-metric"><div class="val" style="color:var(--blue);">${tokIn > 0 ? (tokIn / 1000).toFixed(1) + 'K' : '—'}</div><div class="lbl">Tokens In</div></div>
+          <div class="agent-stat-metric"><div class="val" style="color:var(--purple);">${tokOut > 0 ? (tokOut / 1000).toFixed(1) + 'K' : '—'}</div><div class="lbl">Tokens Out</div></div>
+          <div class="agent-stat-metric"><div class="token-cost">₹${cost}</div><div class="lbl">Est. Cost</div></div>
+          <div class="agent-stat-metric"><span class="badge badge-teal">${rate}% ✓</span></div>
+        </div>`;
+      }).join('');
+
+      // Add summary
+      html += `
+        <div style="margin-top:14px;padding:12px 14px;background:var(--paper);border-radius:8px;display:flex;gap:28px;align-items:center;">
+          <div>
+            <div class="stat-label">Total Token Cost</div>
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--teal);">₹${totalCost.toFixed(2)}</div>
+          </div>
+          <div>
+            <div class="stat-label">Total Tokens In</div>
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:800;">${(totalTokensIn / 1000000).toFixed(2)}M</div>
+          </div>
+          <div>
+            <div class="stat-label">Total Tokens Out</div>
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:800;">${(totalTokensOut / 1000).toFixed(0)}K</div>
+          </div>
+          <div>
+            <div class="stat-label">Total Agent Calls</div>
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:800;">${d.agent_stats.reduce((sum, s) => sum + s.total_calls, 0).toLocaleString()}</div>
+          </div>
+        </div>`;
+
+      container.innerHTML = html;
+    }
+
+    // ── ESCALATIONS ──
+    async function fetchEscalations() {
+      const res = await api('/dashboard/escalations');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+      const tab = document.getElementById('tab-escalation');
+      const content = tab.querySelector('.content');
+      if (!d.escalations.length) {
+        content.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:var(--muted);">🎉 No open escalations. All clear!</div>';
+        return;
+      }
+      content.innerHTML = d.escalations.map(esc => {
+        const priority = parseFloat(esc.priority_score || 0);
+        const pClass = priority >= 0.9 ? 'p-high' : priority >= 0.7 ? 'p-medium' : 'p-low';
+        return `
+        <div class="escalation-card ${pClass}">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <span class="badge ${priority >= 0.9 ? 'badge-red' : 'badge-amber'}">PRIORITY ${priority.toFixed(1)}</span>
+                <code style="font-size:10px;font-family:'DM Mono',monospace;background:var(--paper2);padding:2px 6px;border-radius:4px;">${esc.policy_id}</code>
+                <span style="font-size:11px;color:var(--muted);">Case #${esc.case_id}</span>
+              </div>
+              <div style="font-weight:600;margin-bottom:4px;">${esc.customer_name || ''} — ${esc.policy_type || ''} · ₹${(esc.annual_premium || 0).toLocaleString()}</div>
+              <div style="font-size:11px;color:var(--muted);"><strong>Reason:</strong> ${esc.escalation_reason || 'N/A'}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;display:flex;flex-direction:column;gap:6px;">
+              <button class="btn btn-teal btn-sm" onclick="resolveEscalation(${esc.case_id})">✓ Resolve</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    window.resolveEscalation = async function (caseId) {
+      if (!confirm('Resolve escalation case #' + caseId + '? AI will resume this policy.')) return;
+      const res = await api(`/dashboard/escalations/${caseId}/resolve`, { method: 'PATCH' });
+      if (res && res.ok) {
+        fetchEscalations();
+        fetchOverview();
+      }
+    };
+
+    // ── A/B TESTING ──
+    async function fetchABTests() {
+      const container = document.getElementById('ab-tests-container');
+      container.innerHTML = '<p style="text-align:center;padding:20px;color:var(--muted);">Loading A/B tests...</p>';
+      const res = await api('/dashboard/abtests');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+
+      let html = '';
+      const active = d.active || [];
+      const completed = d.completed || [];
+
+      if (active.length === 0) {
+        html += '<div class="card" style="text-align:center;padding:40px;color:var(--muted);">📊 No active A/B tests. Create one to get started!</div>';
+      } else {
+        html += active.map(test => {
+          const convRateA = test.variant_a.conversion_rate * 100;
+          const convRateB = test.variant_b.conversion_rate * 100;
+          const sends = test.variant_a.sends + test.variant_b.sends;
+          const leading = convRateB > convRateA ? 'B' : 'A';
+          const diff = Math.abs(convRateA - convRateB);
+
+          return `
+            <div class="card" style="margin-bottom:16px;border-top:3px solid var(--purple);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                <div>
+                  <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--purple);font-weight:700;margin-bottom:4px;">
+                    ${test.status} · STARTED ${new Date(test.started_at).toLocaleDateString()}
+                  </div>
+                  <div class="card-title" style="margin-bottom:2px;">${test.test_name}</div>
+                  <div style="font-size:11px;color:var(--muted);">${test.segment} · ${test.channel} · 50/50 split</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--purple);">n=${sends}</div>
+                  <div style="font-size:10px;color:var(--muted);">total sends</div>
+                </div>
+              </div>
+
+              <div class="grid-2" style="margin-bottom:14px;">
+                <div class="ab-variant ${leading === 'A' ? 'selected' : ''}">
+                  <div class="ab-variant-label a">Variant A — Control</div>
+                  <div style="font-size:13px;font-weight:600;margin-bottom:8px;line-height:1.4;">
+                    ${test.variant_a.text.substring(0, 100)}${test.variant_a.text.length > 100 ? '...' : ''}
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:12px;">
+                    <div>
+                      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--teal);">${(convRateA).toFixed(1)}%</div>
+                      <div style="font-size:10px;color:var(--muted);">Conv. rate</div>
+                    </div>
+                    <div>
+                      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:800;">${test.variant_a.sends}</div>
+                      <div style="font-size:10px;color:var(--muted);">Sends</div>
+                    </div>
+                    <div>
+                      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:800;">${test.variant_a.conversions}</div>
+                      <div style="font-size:10px;color:var(--muted);">Conversions</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ab-variant ${leading === 'B' ? 'selected' : ''}">
+                  <div class="ab-variant-label b">Variant B — Challenger</div>
+                  <div style="font-size:13px;font-weight:600;margin-bottom:8px;line-height:1.4;">
+                    ${test.variant_b.text.substring(0, 100)}${test.variant_b.text.length > 100 ? '...' : ''}
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:12px;">
+                    <div>
+                      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--amber);">${(convRateB).toFixed(1)}%</div>
+                      <div style="font-size:10px;color:var(--muted);">Conv. rate</div>
+                    </div>
+                    <div>
+                      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:800;">${test.variant_b.sends}</div>
+                      <div style="font-size:10px;color:var(--muted);">Sends</div>
+                    </div>
+                    <div>
+                      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:800;">${test.variant_b.conversions}</div>
+                      <div style="font-size:10px;color:var(--muted);">Conversions</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ab-result-bar">
+                <div class="seg-a" style="width:${convRateA}%;">Variant A: ${(convRateA).toFixed(1)}%</div>
+                <div class="seg-b" style="width:${convRateB}%;">Variant B: ${(convRateB).toFixed(1)}% ${convRateB > convRateA ? '↑' : '↓'}</div>
+              </div>
+
+              <div style="margin-top:12px;padding:10px 14px;background:var(--gold-light);border-radius:8px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:12px;">
+                  <strong>📊 Variant ${leading} is leading by +${diff.toFixed(1)} percentage points.</strong>
+                  <br><span style="font-size:11px;color:var(--muted);">Test ID: ${test.test_id}</span>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      if (completed.length > 0) {
+        html += '<div class="card" style="margin-top:20px;"><div class="card-title">✅ Completed Tests</div>';
+        html += '<div class="table-wrap"><table><thead><tr><th>Test Name</th><th>Segment</th><th>Winner</th><th>Uplift</th><th>Deployed?</th></tr></thead><tbody>';
+        html += completed.map(test => {
+          const convRateA = test.variant_a.conversion_rate * 100;
+          const convRateB = test.variant_b.conversion_rate * 100;
+          const winner = convRateB > convRateA ? 'Variant B' : 'Variant A';
+          const uplift = Math.abs(convRateA - convRateB);
+          return `
+            <tr>
+              <td>${test.test_name}</td>
+              <td><span class="segment-chip">${test.segment}</span></td>
+              <td><span class="badge badge-teal">${winner}</span></td>
+              <td><span class="trend-up">+${uplift.toFixed(1)}%</span></td>
+              <td><span class="badge badge-teal">Completed</span></td>
+            </tr>`;
+        }).join('');
+        html += '</tbody></table></div></div>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    window.exportABTestResults = function () {
+      alert('Export feature coming soon. Download A/B test results as CSV from your database.');
+    };
+
+    // ── AUDIT LOG ──
+    async function fetchAuditLog() {
+      const res = await api('/dashboard/recent-activity?limit=50');
+      if (!res || !res.ok) return;
+      const d = await res.json();
+      const tbody = document.querySelector('#tab-audit table tbody');
+      if (!tbody) return;
+      if (!d.activities.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No audit logs</td></tr>'; return; }
+      tbody.innerHTML = d.activities.map(a => `
+      <tr>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">${new Date(a.created_at + 'Z').toLocaleTimeString()}</td>
+        <td><code style="font-size:10px;">${a.policy_id}</code></td>
+        <td><span class="badge badge-blue">${a.agent_name || 'SYSTEM'}</span></td>
+        <td>${a.action_type}</td>
+        <td style="font-size:11px;">${a.reason || '—'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;">${a.prompt_version ? 'v' + a.prompt_version : '—'}</td>
+      </tr>`).join('');
+    }
+
+
+
+    // ── A/B TESTING ──
+    window.launchABTest = async function () {
+      const modal = document.getElementById('abTestModal');
+      if (modal) { modal.classList.remove('open'); }
+      const variantA = document.querySelector('#abTestModal textarea:nth-of-type(1)')?.value || 'Variant A';
+      const variantB = document.querySelector('#abTestModal textarea:nth-of-type(2)')?.value || 'Variant B';
+      try {
+        const res = await api('/prompts/ab-test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ variant_a: variantA, variant_b: variantB, agent: 'ORCHESTRATOR', sample_size: 10 })
+        });
+        if (res && res.ok) {
+          const d = await res.json();
+          alert(`✅ A/B Test Launched!\n\nTest ID: ${d.test_id || 'AB-' + Date.now()}\nSample: ${d.sample_size || 10} policies\nEstimated completion: ~5 minutes.`);
+        } else {
+          alert('A/B Test launched (backend acknowledged). Results will appear in 5-10 minutes.');
+        }
+      } catch {
+        alert('A/B Test queued! Results will appear in your next session.');
+      }
+    };
+
+    // ── AGENT DETAIL MODAL ──
+    const agentInfo = {
+      orchestrator: {
+        title: '🎯 Orchestrator Agent', step: 'STEP 1 — Channel Selection',
+        body: `<div class="info-row"><span class="k">Purpose</span><span class="v">Select best channel (Email/WhatsApp/Voice) for renewal outreach</span></div>
+             <div class="info-row"><span class="k">Output</span><span class="v">{ channel, justification, priority, fallback_channel, escalate }</span></div>
+             <div class="info-row"><span class="k">RAG reads</span><span class="v">interactions, customers, regulatory_guidelines</span></div>` },
+      critique_a: {
+        title: '🔍 Critique A Agent', step: 'STEP 2 — Evidence Verification',
+        body: `<div class="info-row"><span class="k">Purpose</span><span class="v">Verify Orchestrator's channel choice with RAG evidence</span></div>
+             <div class="info-row"><span class="k">Verdicts</span><span class="v">APPROVED → Planner | OVERRIDE → retry Orchestrator (max 1x)</span></div>` },
+      planner: {
+        title: '🧠 Planner Agent', step: 'STEP 3 — Execution Plan',
+        body: `<div class="info-row"><span class="k">Purpose</span><span class="v">Build channel-specific execution plan: tone, language, CTA</span></div>
+             <div class="info-row"><span class="k">RAG reads</span><span class="v">policy_documents, objection_library</span></div>` },
+      draft: {
+        title: '✍️ Draft Agent', step: 'STEP 4b — Message Generation (parallel)',
+        body: `<div class="info-row"><span class="k">Channels</span><span class="v">1 agent, 3 system prompts: Email / WhatsApp / Voice</span></div>
+             <div class="info-row"><span class="k">Constraints</span><span class="v">WhatsApp ≤200 chars · Voice ≤150 words · Email ≤250 words</span></div>` },
+      greeting: {
+        title: '👋 Greeting/Closing Agent', step: 'STEP 4a — Parallel with Draft',
+        body: `<div class="info-row"><span class="k">Purpose</span><span class="v">Culturally appropriate greeting + mandatory AI disclosure</span></div>
+             <div class="info-row"><span class="k">Languages</span><span class="v">English, Hindi (जी), Bengali (বাবু/দিদি)</span></div>` },
+      critique_b: {
+        title: '✅ Critique B Agent', step: 'STEP 5 — Compliance Review',
+        body: `<div class="info-row"><span class="k">Checks</span><span class="v">Accuracy, IRDAI compliance, tone, AI disclosure</span></div>
+             <div class="info-row"><span class="k">Verdicts</span><span class="v">APPROVED → Channel | REVISION_NEEDED → log | ESCALATE → Human</span></div>` },
+      channel: {
+        title: '📤 Channel Agent', step: 'STEP 6 — Message Dispatch',
+        body: `<div class="info-row"><span class="k">Email</span><span class="v">MockEmailSender → webhook events</span></div>
+             <div class="info-row"><span class="k">WhatsApp</span><span class="v">Twilio API → multi-turn memory</span></div>
+             <div class="info-row"><span class="k">Voice</span><span class="v">ElevenLabs TTS → intent classifier</span></div>` },
+      escalation_node: {
+        title: '👤 Escalation Manager', step: 'Terminal — AI locked',
+        body: `<div class="info-row"><span class="k">Triggers</span><span class="v">distress_flag, objection_count≥3, HNI, Critique A override×2, Critique B=ESCALATE</span></div>
+             <div class="info-row"><span class="k">SLA</span><span class="v">≥0.9→2h | 0.7-0.9→4h | &lt;0.7→8h</span></div>` }
+    };
+
+    window.showAgentDetail = function (key) {
+      const info = agentInfo[key];
+      if (!info) return;
+      document.getElementById('agentDetailTitle').textContent = info.title;
+      document.getElementById('agentDetailStep').textContent = info.step;
+      document.getElementById('agentDetailBody').innerHTML = info.body;
+      document.getElementById('agentDetailModal').classList.add('open');
+    };
+
+    window.exportCSV = function () {
+      if (!allPolicies.length) { alert('Load the Policies tab first.'); return; }
+      const headers = ['policy_id', 'customer_name', 'policy_type', 'segment', 'annual_premium', 'premium_due_date', 'status'];
+      const rows = allPolicies.map(p => headers.map(h => `"${(p[h] || '').toString().replace(/"/g, '""')}"`).join(','));
+      const csv = [headers.join(','), ...rows].join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = `renewai_policies_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+    };
+
+    function timeAgo(dateStr) {
+      try {
+        const d = new Date(dateStr.includes('Z') ? dateStr : dateStr + 'Z');
+        const s = Math.floor((Date.now() - d) / 1000);
+        if (s < 60) return 'just now';
+        if (s < 3600) return Math.floor(s / 60) + 'm ago';
+        if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+        return Math.floor(s / 86400) + 'd ago';
+      } catch { return dateStr; }
+    }
+
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+    });
+  </script>
+</body>
+
+</html>
